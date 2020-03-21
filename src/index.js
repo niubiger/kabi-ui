@@ -1,1 +1,1 @@
-// export { default as xxx } from './components/xxx';
+export { default as Input } from './components/Input';
