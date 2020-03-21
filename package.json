@@ -1,0 +1,82 @@
+{
+  "name": "kabi-ui",
+  "version": "0.1.0",
+  "description": "Kabi is a react UI library.",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "unpkg": "umd/kabi.min.js",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w"
+  },
+  "files": [
+    "umd",
+    "lib",
+    "es",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niubiger/kabi-ui.git"
+  },
+  "keywords": ["react", "react-component", "component", "components", "ui", "kabi"],
+  "maintainers": [
+    "winjeysong<winjey-song@163.com>",
+    "qianyuanjia"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/niubiger/kabi-ui/issues"
+  },
+  "homepage": "https://github.com/niubiger/kabi-ui#readme",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-external-helpers": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
+    "@babel/preset-react": "^7.9.1",
+    "@svgr/rollup": "^5.2.0",
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.4.0",
+    "eslint-config-umi": "^1.4.0",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^3.1.0",
+    "less": "^3.11.1",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "rollup": "^2.1.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.2",
+    "rollup-plugin-postcss": "^2.5.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-uglify": "^6.0.4",
+    "rollup-plugin-url": "^3.0.1"
+  },
+  "peerDependencies": {
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
