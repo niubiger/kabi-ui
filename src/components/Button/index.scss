@@ -1,0 +1,11 @@
+@import "../../config/variables.scss";
+
+.#{$global-prefix}-button{
+  width: 100px;
+  height: 40px;
+  border:0 none;
+  outline: 0 none;
+  &-default{
+    background-color: $main-color;
+  }
+}
