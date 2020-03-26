@@ -1,7 +1,4 @@
 import React, { SFC } from 'react';
-import t from 'prop-types';
-import styles from './index.scss';
-// import './index.less';
 import './index.scss';
 
 export interface InputProps {
