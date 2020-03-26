@@ -4,6 +4,7 @@
 入口为 `src/index.js`，组件代码放到 `src/components` 下。
 
 ## 文档相关
+### 开发运行
 1. 借助 docz 工具进行开发
     ```sh
     npm run doc:dev
@@ -12,4 +13,17 @@
     ```sh
     npm run doc:build
     ```
-其他事项见[doc readme](./doc/README.md)。
+### 注意事项
+#### 关于 `sharp` 依赖
+1. `sharp` 依赖需要代理才能下载，无代理可以直接下载以下资源包
+    > 链接：https://share.weiyun.com/5MRlBUO 密码：bj6mnx
+2. 获取 npm cache 目录
+    ```sh
+    npm config get cache # mac系统下默认为 `/Users/username/.npm`
+    ```
+3. 将下载的包移入属于 `sharp` 的 cache 目录
+    ```sh
+    mv /Users/username/Download/libvips-8.9.1-darwin-x64.tar.gz /Users/username/.npm/_libvips
+    ```
+## 待增加
+1. 对 *cssmodules* 的支持
