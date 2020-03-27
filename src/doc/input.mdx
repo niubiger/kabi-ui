@@ -17,7 +17,7 @@ import { Input } from '../';
     {() => {
             const [val, setVal] = React.useState('');
             return (
-                <div style={{ padding: 20, display: 'flex', justifyContent: 'space-around'}}>
+                <div style={{ padding: 20, display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap'}}>
                     <Input
                         label="姓名"
                         value={val}
@@ -25,6 +25,8 @@ import { Input } from '../';
                     />
                     <Input label="手机" defaultValue="13333333" />
                     <Input label="性别" disabled />
+                    <Input label="地址" variant="warn" />
+                    <Input label="地址" variant="danger" />
                 </div>
             );
         }}

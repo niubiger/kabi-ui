@@ -13,6 +13,7 @@
     line-height: 30px;
     padding-top: 16px;
     position: relative;
+    transition: all 0.3s;
 
     input::-webkit-input-placeholder,
     input:-moz-placeholder,
@@ -24,9 +25,17 @@
     &-disabled {
       cursor: not-allowed;
     }
+
+    &-normal:not(&-disabled) {
+      border-color: $border-color;
+    }
+
+    &:not(&-disabled):hover {
+      box-shadow: 0 8px 5px -5px rgba(black, $alpha: 0.05);
+    }
   }
 
-  &-wrapper:not(&-wrapper-disabled):hover > &-label {
+  &-wrapper-normal:not(&-wrapper-disabled):hover > &-label {
     color: $main-color;
   }
 
@@ -36,12 +45,17 @@
     cursor: not-allowed;
   }
 
+  &-wrapper-normal > &-line {
+    background: $main-color;
+  }
+
   &-label {
     color: $text-color-2;
     margin-right: 8px;
     position: absolute;
     left: 0;
     transition: all 0.3s;
+    pointer-events: none;
   }
 
   &-x {
@@ -59,7 +73,6 @@
     display: inline-block;
     width: 100%;
     height: 1px;
-    background: $main-color;
     position: absolute;
     bottom: -1px;
     left: 0;
@@ -69,23 +82,58 @@
 
   &-wrapper:not(&-wrapper-disabled) > &-x:focus + &-label,
   &-wrapper-filled > &-label {
-    transform: translate(calc(-0.2 * #{$font-size-normal}), -22px) scale(0.8);
+    font-size: $font-size-sm;
+    transform: translateY(-22px);
   }
 
-  &-wrapper:not(&-wrapper-disabled) > &-x:focus + &-label {
+  &-wrapper-normal:not(&-wrapper-disabled) > &-x:focus + &-label {
     color: $main-color;
   }
 
-  &-wrapper:not(&-wrapper-disabled) > &-x:active + &-label {
-    color: darken($main-color, 20%);
+  &-wrapper-normal:not(&-wrapper-disabled) > &-x:active + &-label {
+    color: darken($main-color, 15%);
   }
 
-  &-wrapper:not(&-wrapper-disabled) > &-x:focus ~ &-line {
+  &-wrapper-normal:not(&-wrapper-disabled) > &-x:focus ~ &-line {
     transform: scale(1);
   }
 
-  &-wrapper:not(&-wrapper-disabled) > &-x:active ~ &-line {
+  &-wrapper-normal:not(&-wrapper-disabled) > &-x:active ~ &-line {
     transform: scale(1);
-    background: darken($main-color, 20%);
+    background: darken($main-color, 15%);
+  }
+
+  &-wrapper-warn:not(&-wrapper-disabled) > &-label,
+  &-wrapper-warn:not(&-wrapper-disabled):hover > &-label,
+  &-wrapper-warn:not(&-wrapper-disabled) > &-x:focus + &-label {
+    color: $text-color-warn;
+  }
+  &-wrapper-warn:not(&-wrapper-disabled) > &-x:focus ~ &-line {
+    background: $warn-color;
+    transform: scale(1);
+  }
+  &-wrapper-warn:not(&-wrapper-disabled) > &-x:active ~ &-line {
+    background: darken($warn-color, 5%);
+    transform: scale(1);
+  }
+  &-wrapper-warn:not(&-wrapper-disabled) > &-x:active + &-label {
+    color: darken($warn-color, 5%);
+  }
+
+  &-wrapper-danger:not(&-wrapper-disabled) > &-label,
+  &-wrapper-danger:not(&-wrapper-disabled):hover > &-label,
+  &-wrapper-danger:not(&-wrapper-disabled) > &-x:focus + &-label {
+    color: $text-color-danger;
+  }
+  &-wrapper-danger:not(&-wrapper-disabled) > &-x:focus ~ &-line {
+    background: $danger-color;
+    transform: scale(1);
+  }
+  &-wrapper-danger:not(&-wrapper-disabled) > &-x:active ~ &-line {
+    background: darken($danger-color, 15%);
+    transform: scale(1);
+  }
+  &-wrapper-danger:not(&-wrapper-disabled) > &-x:active + &-label {
+    color: darken($danger-color, 15%);
   }
 }

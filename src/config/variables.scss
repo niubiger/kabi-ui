@@ -9,10 +9,14 @@ $font-code: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monos
 
 // --- color ---
 $main-color: #6e92ff;
+$warn-color: #f7961f;
+$danger-color: #ff4747;
 
 $text-color-1: #333;
 $text-color-2: #666;
 $text-color-3: #999;
+$text-color-warn: $warn-color;
+$text-color-danger: $danger-color;
 
 $border-color: #eee;
 

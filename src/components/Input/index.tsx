@@ -1,6 +1,6 @@
 import React, { FC, ChangeEvent, useState } from 'react';
 import classNames from 'classnames';
-import theme from '../../config/theme.js';
+import theme from '../../config/theme';
 import './index.scss';
 
 interface Target {
@@ -18,15 +18,21 @@ export interface InputProps {
   /**
    * change事件
    */
-  onChange?: (val: string) => Boolean;
+  onChange?: (val: string) => void;
   /**
    * 默认值
    */
   defaultValue?: string | number;
   /**
    * 是否禁用
+   * @default false
    */
   disabled?: boolean;
+  /**
+   * 表现类型
+   * @default 'normal'
+   */
+  variant?: 'normal' | 'warn' | 'danger';
 }
 
 const clsPrefix = `${theme['global-prefix']}-input`;
@@ -37,6 +43,7 @@ const Input: FC<InputProps> = ({
   onChange,
   defaultValue = '',
   disabled,
+  variant = 'normal',
   ...props
 }) => {
   const [val, setVal] = useState(defaultValue || value);
@@ -47,8 +54,8 @@ const Input: FC<InputProps> = ({
   return (
     <span className={`${clsPrefix}-outer`}>
       <span
-        className={classNames(`${clsPrefix}-wrapper`, {
-          [`${clsPrefix}-wrapper-filled`]: !!String(value) || !!String(defaultValue),
+        className={classNames(`${clsPrefix}-wrapper`, `${clsPrefix}-wrapper-${variant}`, {
+          [`${clsPrefix}-wrapper-filled`]: !!String(val),
           [`${clsPrefix}-wrapper-disabled`]: !!disabled,
         })}
       >
