@@ -1,3 +1,91 @@
-.input {
-    font-size: 14px;
+@import '../../config/variables.scss';
+
+.#{$global-prefix}-input {
+  &-outer {
+    display: inline-block;
+  }
+
+  &-wrapper {
+    display: inline-block;
+    font-size: $font-size-normal;
+    border-bottom: 1px solid $border-color;
+    height: 30px;
+    line-height: 30px;
+    padding-top: 16px;
+    position: relative;
+
+    input::-webkit-input-placeholder,
+    input:-moz-placeholder,
+    input::-moz-placeholder,
+    input:-ms-input-placeholder {
+      color: $text-color-3;
+    }
+
+    &-disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &-wrapper:not(&-wrapper-disabled):hover > &-label {
+    color: $main-color;
+  }
+
+  &-wrapper-disabled > &-x,
+  &-wrapper-disabled > &-label {
+    color: $text-color-3;
+    cursor: not-allowed;
+  }
+
+  &-label {
+    color: $text-color-2;
+    margin-right: 8px;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s;
+  }
+
+  &-x {
+    color: $text-color-1;
+    font-size: inherit;
+    border: 0;
+    padding: 0;
+    outline: 0;
+    height: 22px;
+    line-height: 22px;
+    background: transparent;
+  }
+
+  &-line {
+    display: inline-block;
+    width: 100%;
+    height: 1px;
+    background: $main-color;
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    transform: scaleX(0);
+    transition: all 0.3s;
+  }
+
+  &-wrapper:not(&-wrapper-disabled) > &-x:focus + &-label,
+  &-wrapper-filled > &-label {
+    transform: translate(calc(-0.2 * #{$font-size-normal}), -22px) scale(0.8);
+  }
+
+  &-wrapper:not(&-wrapper-disabled) > &-x:focus + &-label {
+    color: $main-color;
+  }
+
+  &-wrapper:not(&-wrapper-disabled) > &-x:active + &-label {
+    color: darken($main-color, 20%);
+  }
+
+  &-wrapper:not(&-wrapper-disabled) > &-x:focus ~ &-line {
+    transform: scale(1);
+  }
+
+  &-wrapper:not(&-wrapper-disabled) > &-x:active ~ &-line {
+    transform: scale(1);
+    background: darken($main-color, 20%);
+  }
 }

@@ -1,0 +1,31 @@
+---
+name: Input
+route: /input
+---
+
+import { Props, Playground } from 'docz';
+import { Input } from '../';
+
+# Input
+
+## Input Props
+
+<Props of={Input} />
+
+## Input 示例
+<Playground>
+    {() => {
+            const [val, setVal] = React.useState('');
+            return (
+                <div style={{ padding: 20, display: 'flex', justifyContent: 'space-around'}}>
+                    <Input
+                        label="姓名"
+                        value={val}
+                        onChange={val => setVal(val)}
+                    />
+                    <Input label="手机" defaultValue="13333333" />
+                    <Input label="性别" disabled />
+                </div>
+            );
+        }}
+</Playground>
