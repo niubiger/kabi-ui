@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, useState } from 'react';
+import React, { FC, ChangeEvent, useState, CSSProperties, InputHTMLAttributes } from 'react';
 import classNames from 'classnames';
 import theme from '../../config/theme';
 import './index.scss';
@@ -33,6 +33,14 @@ export interface InputProps {
    * @default 'normal'
    */
   variant?: 'normal' | 'warn' | 'danger';
+  /**
+   * 包裹元素的样式
+   */
+  outerStyle?: CSSProperties;
+  /**
+   * 其他 <input> 的原生属性
+   */
+  props?: InputHTMLAttributes<Target>;
 }
 
 const clsPrefix = `${theme['global-prefix']}-input`;
@@ -44,6 +52,7 @@ const Input: FC<InputProps> = ({
   defaultValue = '',
   disabled,
   variant = 'normal',
+  outerStyle,
   ...props
 }) => {
   const [val, setVal] = useState(defaultValue || value);
@@ -52,7 +61,7 @@ const Input: FC<InputProps> = ({
     if (typeof onChange === 'function') onChange(e.target.value);
   };
   return (
-    <span className={`${clsPrefix}-outer`}>
+    <span className={`${clsPrefix}-outer`} style={outerStyle}>
       <span
         className={classNames(`${clsPrefix}-wrapper`, `${clsPrefix}-wrapper-${variant}`, {
           [`${clsPrefix}-wrapper-filled`]: !!String(val),

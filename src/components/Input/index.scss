@@ -6,7 +6,7 @@
   }
 
   &-wrapper {
-    display: inline-block;
+    display: block;
     font-size: $font-size-normal;
     border-bottom: 1px solid $border-color;
     height: 30px;
@@ -61,6 +61,7 @@
   &-x {
     color: $text-color-1;
     font-size: inherit;
+    width: 100%;
     border: 0;
     padding: 0;
     outline: 0;
