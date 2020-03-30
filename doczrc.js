@@ -10,7 +10,7 @@ export default {
   notUseSpecifiers: true,
   typescript: true,
   plugins: [
-    css({ preprocessor: 'sass', cssmodules: true, test: /\.scss|css$/ }),
+    css({ preprocessor: 'sass', cssmodules: true, test: /\.(scss|css)$/ }),
     css({ preprocessor: 'postcss' }),
   ],
 };

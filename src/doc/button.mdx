@@ -1,0 +1,35 @@
+---
+name: Button
+route: /components/button
+---
+
+import { Props, Playground } from 'docz';
+import { Button } from '../';
+
+# Button
+
+## Button Props
+
+<Props of={Button} />
+
+## Button 示例
+<Playground>
+    {() => {
+        const [val, setVal] = React.useState('');
+        return (
+            <>
+            <div style={{ padding: 20, display: 'flex', flexWrap: 'wrap',alignItems:'center'}}>
+                <Button size="middle" type="primary" onClick={()=>alert('hello kabi!')}
+                outerStyle={{marginRight:20}}>kabi-button</Button>
+                <Button size="middle" type="danger" outerStyle={{marginRight:20}}>kabi-button</Button>
+                <Button size="middle" type="warn" outerStyle={{marginRight:20}}>kabi-button</Button>
+            </div>
+            <div style={{ padding: 20, display: 'flex', flexWrap: 'wrap',alignItems:'center'}}>
+                <Button size="small" outerStyle={{marginRight:20}}>kabi-button</Button>
+                <Button size="middle" outerStyle={{marginRight:20}}>kabi-button</Button>
+                <Button size="large" outerStyle={{marginRight:20}}>kabi-button</Button>
+            </div>
+            </>
+        );
+    }}
+</Playground>

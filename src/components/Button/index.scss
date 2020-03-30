@@ -1,0 +1,38 @@
+@import '../../config/variables.scss';
+.#{$global-prefix}-button {
+  &-outer {
+    outline: 0 none;
+    border: 0 none;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 4px;
+    &:active {
+      background-image: radial-gradient(
+        circle farthest-corner at center,
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0.3)
+      );
+    }
+  }
+  &-small {
+    font-size: $font-size-sm;
+    padding: 6px 10px;
+  }
+  &-middle {
+    font-size: $font-size-normal;
+    padding: 10px 30px;
+  }
+  &-large {
+    font-size: $font-size-md;
+    padding: 12px 80px;
+  }
+  &-primary {
+    background-color: $main-color;
+  }
+  &-danger {
+    background-color: $danger-color;
+  }
+  &-warn {
+    background-color: $warn-color;
+  }
+}
