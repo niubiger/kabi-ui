@@ -1,0 +1,55 @@
+---
+name: Popover
+route: /popover
+---
+
+import { Props, Playground } from 'docz';
+import { Popover, Button, Input } from '../';
+
+# Popover
+
+## Popover Props
+
+<Props of={Popover} />
+
+## Popover 示例
+<Playground>
+    {() => {
+        const [position, setPosition] = React.useState('right-top');
+        const [distance, setDistance] = React.useState(4);
+        const positions = [
+            'left-top',
+            'left',
+            'left-bottom',
+            'top-left',
+            'top',
+            'top-right',
+            'right-top',
+            'right',
+            'right-bottom',
+            'bottom-left',
+            'bottom',
+            'bottom-right',
+        ];
+        return (
+            <div style={{ padding: '0 20px 20px' }}>
+                <h3>position</h3>
+                <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', textAlign: 'center'}}>
+                    {positions.map(p => <div style={{ width: 'calc(100% / 3)' }}><Button onClick={() => setPosition(p)} outerStyle={{ width: 100, marginBottom: 10 }}>{p}</Button></div>)}
+                </div>
+                <h3>distance</h3>
+                <Input label="distance" type="number" value={distance} onChange={val => setDistance(Number(val))} />
+                <div style={{ marginTop: 10 }}>
+                <h3>play</h3>
+                <Popover triggerElement={<Button type="warn">不要点击我啊😳</Button>} position={position} distance={distance}>
+                    <div style={{ padding: '4px 12px' }}>
+                        <p>超级超级多内容超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                    </div>
+                </Popover>
+                </div>
+            </div>
+        );
+    }}
+</Playground>

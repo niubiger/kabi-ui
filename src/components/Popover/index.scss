@@ -1,0 +1,29 @@
+@import '../../config/variables.scss';
+
+.#{$global-prefix}-popover {
+  &-outer {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  &-x {
+    position: absolute;
+    visibility: hidden;
+    transform: scale(0);
+    opacity: 0;
+    z-index: -999;
+    background: #fff;
+    box-shadow: $shadow-normal;
+    width: max-content;
+    transition: all 0.3s;
+  }
+  &-x-show {
+    visibility: visible;
+    z-index: 999;
+    transform: scale(1);
+    opacity: 1;
+  }
+  &-trigger-outer {
+    display: contents;
+  }
+}
