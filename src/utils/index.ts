@@ -14,15 +14,16 @@ type Offset = {
   left: number;
 };
 
-export const getOffset = (ele: IElement): Offset => {
+export const getOffset = (ele: IElement, target: HTMLElement = document.body): Offset => {
   let [offsetTop, offsetLeft] = [0, 0];
+
   do {
-    if (ele !== null) {
+    if (ele) {
       offsetTop += ele.offsetTop;
       offsetLeft += ele.offsetLeft;
       ele = ele.offsetParent;
     }
-  } while (ele);
+  } while (ele && ele !== target);
 
   return { top: offsetTop, left: offsetLeft };
 };

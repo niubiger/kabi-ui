@@ -1,4 +1,12 @@
-import React, { FC, ReactElement, useState, useRef, useEffect, MouseEventHandler } from 'react';
+import React, {
+  FC,
+  ReactElement,
+  useState,
+  useRef,
+  useEffect,
+  MouseEventHandler,
+  useMemo,
+} from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import theme from '../../config/theme';
@@ -58,22 +66,33 @@ const Popover: FC<PopoverProps> = ({
     e.stopPropagation();
     setShow(!show);
   };
+  const _container = useMemo(() => container() || document.body, [container]);
+
+  useEffect(() => {
+    _container.style.position = 'relative';
+    return () => {
+      _container.style.position = 'static';
+    };
+  }, [_container]);
 
   useEffect(() => {
     if (show) {
       // 由于 popRef 进行了 transform 变化，所以要用 offsetHeight, offsetWidth 来获取宽高
       const popHeight = (popRef.current as HTMLDivElement).offsetHeight;
       const popWidth = (popRef.current as HTMLDivElement).offsetWidth;
-      const { top, left } = getOffset(
+      const { top: offsetTop, left: offsetLeft } = getOffset(
         (triggerRef.current as HTMLDivElement).children[0] as IElement,
+        _container,
       );
       const {
+        top,
+        left,
         height,
         width,
       } = (triggerRef.current as HTMLDivElement).children[0].getBoundingClientRect();
 
       const { top: _top, left: _left, transformOrigin: _transformOrigin } = calcPopover(
-        { top, left, height, width },
+        { top, left, height, width, offsetTop, offsetLeft },
         popWidth,
         popHeight,
         position,
@@ -84,7 +103,7 @@ const Popover: FC<PopoverProps> = ({
       (popRef.current as HTMLDivElement).style.left = _left + 'px';
       (popRef.current as HTMLDivElement).style.transformOrigin = _transformOrigin;
     }
-  }, [show, position, distance]);
+  }, [show, position, distance, _container]);
 
   return (
     <>
@@ -100,7 +119,7 @@ const Popover: FC<PopoverProps> = ({
             {children}
           </div>
         </div>,
-        typeof container === 'function' ? container() : (() => document.body)(),
+        _container,
       )}
     </>
   );

@@ -17,6 +17,8 @@ import { Popover, Button, Input } from '../';
     {() => {
         const [position, setPosition] = React.useState('right-top');
         const [distance, setDistance] = React.useState(4);
+        const containerRef = React.useRef(null);
+        const [hasContainer, setHasContainer] = React.useState(false);
         const positions = [
             'left-top',
             'left',
@@ -31,23 +33,37 @@ import { Popover, Button, Input } from '../';
             'bottom',
             'bottom-right',
         ];
+        const getContainer = React.useCallback(() => containerRef.current, [containerRef.current]);
+        const containerStyle = React.useMemo(() => hasContainer ? { padding: '0 20px 20px', height: 300, overflow: 'auto' } : { padding: '0 20px 20px' }, [hasContainer]);
+        const containerProp = React.useMemo(() => hasContainer ? { container: getContainer } : {}, [hasContainer]);
         return (
-            <div style={{ padding: '0 20px 20px' }}>
+            <div style={containerStyle} ref={containerRef}>
+                
                 <h3>position</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', textAlign: 'center'}}>
                     {positions.map(p => <div style={{ width: 'calc(100% / 3)' }}><Button onClick={() => setPosition(p)} outerStyle={{ width: 100, marginBottom: 10 }}>{p}</Button></div>)}
                 </div>
+                
                 <h3>distance</h3>
                 <Input label="distance" type="number" value={distance} onChange={val => setDistance(Number(val))} />
                 <div style={{ marginTop: 10 }}>
+                
+                <h3>container</h3>
+                <Button onClick={() => setHasContainer(!hasContainer)}>{hasContainer ? '取消设置' : '设置容器'}</Button>
                 <h3>play</h3>
-                <Popover triggerElement={<Button type="warn">不要点击我啊😳</Button>} position={position} distance={distance}>
+                <div style={{ textAlign: 'center' }}>
+                <Popover
+                    triggerElement={<Button type="warn">不要点击我啊😳</Button>}
+                    position={position} distance={distance}
+                    {...containerProp}
+                >
                     <div style={{ padding: '4px 12px' }}>
                         <p>超级超级多内容超级超级多内容</p>
                         <p>超级超级多内容</p>
                         <p>超级超级多内容</p>
                     </div>
                 </Popover>
+                </div>
                 </div>
             </div>
         );
