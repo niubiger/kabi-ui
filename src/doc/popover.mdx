@@ -39,19 +39,19 @@ import { Popover, Button, Input } from '../';
         return (
             <div style={containerStyle} ref={containerRef}>
                 
-                <h3>position</h3>
+                <h3>position: {position}</h3>
                 <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', textAlign: 'center'}}>
                     {positions.map(p => <div style={{ width: 'calc(100% / 3)' }}><Button onClick={() => setPosition(p)} outerStyle={{ width: 100, marginBottom: 10 }}>{p}</Button></div>)}
                 </div>
                 
-                <h3>distance</h3>
+                <h3>distance: {distance}</h3>
                 <Input label="distance" type="number" value={distance} onChange={val => setDistance(Number(val))} />
                 <div style={{ marginTop: 10 }}>
                 
-                <h3>container</h3>
+                <h3>container: {hasContainer ? '自定义容器' : 'body'}</h3>
                 <Button onClick={() => setHasContainer(!hasContainer)}>{hasContainer ? '取消设置' : '设置容器'}</Button>
-                <h3>play</h3>
-                <div style={{ textAlign: 'center' }}>
+                <h3>example</h3>
+                <div style={{ textAlign: 'left' }}>
                 <Popover
                     triggerElement={<Button type="warn">不要点击我啊😳</Button>}
                     position={position} distance={distance}
