@@ -1,0 +1,48 @@
+---
+name: Spin
+route: /components/spin
+menu: Components
+---
+
+import { Props, Playground } from 'docz';
+import { Spin } from '../';
+
+# Spin
+#### 加载中
+## Spin Props
+
+<Props of={Spin} />
+
+## Spin 示例
+<Playground>
+    {() => {
+        return (
+          <div style={{padding:20,fontSize:14}}>
+              <div style={{marginBottom:20 }}>
+                <Spin /><span style={{marginLeft:20}}>无文案spinning...</span>
+              </div>
+              <div style={{marginBottom:20 }}>
+                <Spin tip="加载中......" /><span style={{marginLeft:20}}>有文案spinning...</span>
+              </div>
+               <div style={{marginBottom:20 }}>
+                <Spin tip="加载中......" size="small"/><span style={{marginLeft:20}}>small size spinning...</span>
+              </div>
+               <div style={{marginBottom:20 }}>
+                <Spin tip="加载中......" size="default"/><span style={{marginLeft:20}}>default size spinning...</span>
+              </div>
+               <div style={{marginBottom:20 }}>
+                <Spin tip="加载中......" size="large" /><span style={{marginLeft:20}}>large size spinning...</span>
+              </div>
+              <div style={{marginBottom:20 }}>
+                <Spin tip="加载中......" size="large" tipStyle={{color:"red",fontSize:14}}
+                spinStyle={{color:'#f7961f',fontSize:20}}/><span style={{marginLeft:20}}>通过spinStyle调整颜色和尺寸</span>
+              </div>
+              <Spin tip="加载中......" size="default" >
+                <div style={{width:300,height:150,color:'#000',
+                border:'1px solid #ccc',
+                background:'#6e92ff'}}>spin包裹元素</div>
+              </Spin>
+          </div>
+        );
+    }}
+</Playground>

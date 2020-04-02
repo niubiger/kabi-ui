@@ -1,0 +1,49 @@
+@import '../../config/variables.scss';
+.#{$global-prefix}-spin {
+  &-outer {
+    text-align: center;
+    color: $main-color;
+  }
+  &-inside {
+    display: inline-block;
+    &-spin {
+      &-hide {
+        display: none;
+      }
+    }
+  }
+  &-outside {
+    width: fit-content;
+    position: relative;
+    &-spin {
+      background-color: rgba(255, 255, 255, 0.7);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      &-hide {
+        display: none;
+      }
+    }
+  }
+  &-hide {
+    display: contents;
+  }
+  &-tip {
+    margin-top: 10px;
+  }
+  &-small {
+    font-size: 12px;
+  }
+  &-default {
+    font-size: 14px;
+  }
+  &-large {
+    font-size: 16px;
+  }
+}
