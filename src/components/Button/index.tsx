@@ -3,7 +3,6 @@ import theme from '../../config/theme';
 import { ButtonSize, ButtonType } from './local';
 import { css } from '@emotion/core';
 import './index.scss';
-import './index.scss';
 export interface ButtonProps {
   /**
    * 按钮风格类型

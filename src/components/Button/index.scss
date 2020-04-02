@@ -35,4 +35,10 @@
   &-warn {
     background-color: $warn-color;
   }
+  &-disabled {
+    background-color: $disabled-color;
+    color: $text-color-disabled;
+    cursor: not-allowed;
+    border: 1px solid #d9d9d9;
+  }
 }

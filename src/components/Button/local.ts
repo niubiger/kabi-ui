@@ -7,4 +7,5 @@ export enum ButtonType {
   primary,
   danger,
   warn,
+  disabled,
 }

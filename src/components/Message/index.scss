@@ -1,0 +1,45 @@
+@import '../../config/variables.scss';
+.#{$global-prefix}-message {
+  &-outer {
+    position: fixed;
+    color: #333;
+    font-size: 14px;
+    padding: 0 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    left: 50%;
+    transform: translate(-50%);
+    background-color: #fff;
+    height: 40px;
+    line-height: 40px;
+    z-index: 10;
+    top: 200px;
+    > svg:first-child {
+      margin-right: 0.5em;
+    }
+  }
+  &-info {
+    > svg:first-child {
+      color: $main-color;
+    }
+  }
+  &-success {
+    > svg:first-child {
+      color: $success-color;
+    }
+  }
+  &-error {
+    > svg:first-child {
+      color: $danger-color;
+    }
+  }
+  &-warn {
+    > svg:first-child {
+      color: $warn-color;
+    }
+  }
+  &-loading {
+    > svg:first-child {
+      color: $main-color;
+    }
+  }
+}

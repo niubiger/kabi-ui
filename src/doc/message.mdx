@@ -1,0 +1,67 @@
+---
+name: Message
+route: /message
+menu: Components
+---
+
+import { Props, Playground } from 'docz';
+import { Message,Button ,FakeMessage} from '../';
+
+# Message
+#### 全局提示
+## Message Props
+
+<Props of={FakeMessage} />
+
+## Message 示例
+<Playground>
+    {() => {
+        
+        return (
+            <div style={{ padding: 20, display: 'flex', flexWrap: 'wrap',alignItems:'center'}}>
+              <Button onClick={()=>{
+                  Message.info('normal message');
+              }}
+              outerStyle={{marginRight:20}}>normal message</Button>
+               <Button onClick={()=>{
+                  Message.success('success message');
+              }}
+              outerStyle={{marginRight:20}}>success message</Button>
+              <Button onClick={()=>{
+                  Message.error('error message');
+              }}
+              outerStyle={{marginRight:20}} type="danger">error message</Button>
+              <Button onClick={()=>{
+                  Message.warn('warn message');
+              }}
+              outerStyle={{marginRight:20}} type="warn">warn message</Button>
+              <Button onClick={()=>{
+                  Message.loading('loading message');
+              }}
+              outerStyle={{marginRight:20}}>loading message</Button>
+              <Button onClick={()=>{
+                  Message.info('normal info',2,()=>{
+                    console.log('结束回调！');
+                  },{
+                    top:200,
+                    maxCount:4
+                  }).then(()=>{
+                    console.log('结束回调！');
+                  }).catch(err=>{
+                    console.log(err);
+                  });
+                }} outerStyle={{marginRight:20}}>局部配置</Button>
+                <Button onClick={()=>{
+                    //Message全局配置
+                    Message.config({
+                      showTime:0.3,
+                      hideTime:0.3,
+                      top:100,
+                      maxCount:3,
+                    });
+                    Message.info('全局配置',3);
+                  }} type="warn">全局配置</Button>
+            </div>
+        );
+    }}
+</Playground>

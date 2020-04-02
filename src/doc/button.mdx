@@ -5,10 +5,10 @@ menu: Components
 ---
 
 import { Props, Playground } from 'docz';
-import { Button } from '../';
+import { Button,Message } from '../';
 
 # Button
-
+#### 按钮
 ## Button Props
 
 <Props of={Button} />
@@ -16,19 +16,19 @@ import { Button } from '../';
 ## Button 示例
 <Playground>
     {() => {
-        const [val, setVal] = React.useState('');
         return (
             <>
             <div style={{ padding: 20, display: 'flex', flexWrap: 'wrap',alignItems:'center'}}>
-                <Button size="middle" type="primary" onClick={()=>alert('hello kabi!')}
-                outerStyle={{marginRight:20}}>kabi-button</Button>
-                <Button size="middle" type="danger" outerStyle={{marginRight:20}}>kabi-button</Button>
-                <Button size="middle" type="warn" outerStyle={{marginRight:20}}>kabi-button</Button>
+                <Button size="middle" type="primary" onClick={()=>Message.info('hello kabi!')}
+                outerStyle={{marginRight:20}}>primary-kabi-button</Button>
+                <Button size="middle" type="danger" outerStyle={{marginRight:20}}>danger-kabi-button</Button>
+                <Button size="middle" type="warn" outerStyle={{marginRight:20}}>warn-kabi-button</Button>
+                <Button size="middle" type="disabled" outerStyle={{marginRight:20}}>disabled-kabi-button</Button>
             </div>
             <div style={{ padding: 20, display: 'flex', flexWrap: 'wrap',alignItems:'center'}}>
-                <Button size="small" outerStyle={{marginRight:20}}>kabi-button</Button>
-                <Button size="middle" outerStyle={{marginRight:20}}>kabi-button</Button>
-                <Button size="large" outerStyle={{marginRight:20}}>kabi-button</Button>
+                <Button size="small" outerStyle={{marginRight:20}}>small-kabi-button</Button>
+                <Button size="middle" outerStyle={{marginRight:20}}>middle-kabi-button</Button>
+                <Button size="large" outerStyle={{marginRight:20}}>large-kabi-button</Button>
             </div>
             </>
         );

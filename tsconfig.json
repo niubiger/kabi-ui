@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+      "module": "esnext",
       "target": "es2015",
       "moduleResolution": "node",
       "strict": true,
@@ -10,4 +11,4 @@
       "jsx": "react",
       "suppressImplicitAnyIndexErrors": true
     }
-  }
+}
