@@ -13,4 +13,11 @@ export default {
     css({ preprocessor: 'sass', cssmodules: true, test: /\.(scss|css)$/ }),
     css({ preprocessor: 'postcss' }),
   ],
+  menu: [
+    'Getting started',
+    {
+      name: 'Components',
+      menu: ['Button', 'Input', 'Popover'],
+    },
+  ],
 };
