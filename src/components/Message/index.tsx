@@ -47,7 +47,11 @@ export interface MessageProps {
    */
   onClose?: () => void;
   /**
-   * 局部配置项
+   * 配置项
+   * {showTime?: number;出现时间
+   * hideTime?: number;隐藏时间
+   * top?: number;距离顶部距离(px)
+   * maxCount?: number;同时最多显示几个(默认不限制)}
    */
   config?: Config;
 }
@@ -116,18 +120,18 @@ export interface MessageType {
     config?: Config,
   ) => Promise<any>;
 }
-const Message: MessageType = {
+const message: MessageType = {
   defaultConfig: { showTime: 0.3, hideTime: 0.3, top: 60, maxCount: Infinity },
   rootAndPromiseArr: [],
   config(option: Config) {
-    return Object.assign(Message.defaultConfig, option);
+    return Object.assign(message.defaultConfig, option);
   },
   mountRoot() {
     let root = document.createElement('div');
     let key = performance.now().toString();
-    let index = Message.rootAndPromiseArr.length;
+    let index = message.rootAndPromiseArr.length;
     let rp = { root, key, index };
-    Message.rootAndPromiseArr.push(rp);
+    message.rootAndPromiseArr.push(rp);
     document.body.appendChild(root);
     return rp;
   },
@@ -162,44 +166,44 @@ const Message: MessageType = {
         await delay((duration + config.showTime + config.hideTime) * 1000);
         onClose && onClose();
         resolve();
-        let idx = Message.rootAndPromiseArr.findIndex(item => item.key === rp.key);
+        let idx = message.rootAndPromiseArr.findIndex(item => item.key === rp.key);
         document.body.removeChild(rp.root);
-        Message.rootAndPromiseArr.splice(idx, 1);
+        message.rootAndPromiseArr.splice(idx, 1);
       });
     });
   },
   mergeConfig(config) {
-    return config ? { ...Message.defaultConfig, ...config } : Message.defaultConfig;
+    return config ? { ...message.defaultConfig, ...config } : message.defaultConfig;
   },
   commonDeal(type, content, duration, onClose, config) {
-    const innerConfig = Message.mergeConfig(config);
-    if (Message.rootAndPromiseArr.length === innerConfig.maxCount) {
+    const innerConfig = message.mergeConfig(config);
+    if (message.rootAndPromiseArr.length === innerConfig.maxCount) {
       return Promise.reject('overcount');
     }
-    let rp = Message.mountRoot();
-    let reactEle = Message.getMessageEle(type, innerConfig, rp, duration, content);
-    let newPro = Message.renderEle(reactEle, rp, duration, innerConfig, onClose);
+    let rp = message.mountRoot();
+    let reactEle = message.getMessageEle(type, innerConfig, rp, duration, content);
+    let newPro = message.renderEle(reactEle, rp, duration, innerConfig, onClose);
     rp.promise = newPro;
     return newPro;
   },
   info(content, duration = 2, onClose, config) {
-    return Message.commonDeal('info', content, duration, onClose, config);
+    return message.commonDeal('info', content, duration, onClose, config);
   },
   success(content, duration = 2, onClose, config) {
-    return Message.commonDeal('success', content, duration, onClose, config);
+    return message.commonDeal('success', content, duration, onClose, config);
   },
   error(content, duration = 2, onClose, config) {
-    return Message.commonDeal('error', content, duration, onClose, config);
+    return message.commonDeal('error', content, duration, onClose, config);
   },
   warn(content, duration = 2, onClose, config) {
-    return Message.commonDeal('warn', content, duration, onClose, config);
+    return message.commonDeal('warn', content, duration, onClose, config);
   },
   loading(content, duration = 2, onClose, config) {
-    return Message.commonDeal('loading', content, duration, onClose, config);
+    return message.commonDeal('loading', content, duration, onClose, config);
   },
 };
 
-export const FakeMessage: FC<MessageProps> = () => {
+export const Message: FC<MessageProps> = () => {
   return null;
 };
-export default Message;
+export default message;
