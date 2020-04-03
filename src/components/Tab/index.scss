@@ -3,39 +3,47 @@
 .#{$global-prefix}-tab {
   &-outer {
     background: $white;
-    padding: 10px 0;
     width: 100%;
-    line-height: 1.25;
+    line-height: 1;
     position: relative;
     border-bottom: 1px solid $border-color;
   }
 
   &-x {
+    display: inline-block;
     cursor: pointer;
-    padding: 0 10px;
+    padding: 10px;
     color: $text-color-1;
-    transition: color 0.3s ease-out;
+    transition: color 0.3s $bezier-fastout-slowin;
     box-sizing: border-box;
+    @include onelineEllipsis;
+    &:not(&-disabled):hover,
+    &:not(&-disabled):focus {
+      color: $hover-color;
+    }
+    &:not(&-disabled):active {
+      color: $active-color;
+    }
   }
 
   &-x-active {
-    color: #3196fa;
+    color: $main-color;
   }
 
   &-x-equispaced {
-    display: inline-block;
     text-align: center;
   }
 
   &-x-disabled {
-    color: rgba(255, 255, 255, 0.6);
+    color: $text-disabled-color;
+    cursor: not-allowed;
   }
 
   &-line {
-    background: #3196fa;
+    background: $main-color;
     position: absolute;
     bottom: 0;
-    transition: transform 0.3s ease-out;
+    transition: all 0.3s $bezier-fastout-slowin;
   }
 
   &-contents {
@@ -45,7 +53,7 @@
   &-parts-container {
     text-align: left;
     width: 9999px;
-    transition: transform 0.3s;
+    transition: transform 0.3s $bezier-fastout-slowin;
   }
   &-part {
     display: inline-block;
