@@ -27,3 +27,7 @@ export const getOffset = (ele: IElement, target: HTMLElement = document.body): O
 
   return { top: offsetTop, left: offsetLeft };
 };
+
+export function isArrayNotEmpty(arr: any): boolean {
+  return Array.isArray(arr) && arr.length > 0;
+}

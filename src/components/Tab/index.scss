@@ -1,0 +1,53 @@
+@import '../../config/variables.scss';
+
+.#{$global-prefix}-tab {
+  &-outer {
+    background: $white;
+    padding: 10px 0;
+    width: 100%;
+    line-height: 1.25;
+    position: relative;
+    border-bottom: 1px solid $border-color;
+  }
+
+  &-x {
+    cursor: pointer;
+    padding: 0 10px;
+    color: $text-color-1;
+    transition: color 0.3s ease-out;
+    box-sizing: border-box;
+  }
+
+  &-x-active {
+    color: #3196fa;
+  }
+
+  &-x-equispaced {
+    display: inline-block;
+    text-align: center;
+  }
+
+  &-x-disabled {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &-line {
+    background: #3196fa;
+    position: absolute;
+    bottom: 0;
+    transition: transform 0.3s ease-out;
+  }
+
+  &-contents {
+    overflow-y: hidden;
+  }
+
+  &-parts-container {
+    text-align: left;
+    width: 9999px;
+    transition: transform 0.3s;
+  }
+  &-part {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,166 @@
+import React, { FC, useState, useRef, useEffect, useMemo, useCallback, ReactChildren } from 'react';
+import classNames from 'classnames';
+import debounce from 'lodash/debounce';
+import { isArrayNotEmpty } from '../../utils';
+import { useResize } from '../../utils/hooks';
+import theme from '../../config/theme';
+import './index.scss';
+
+export type Tab = {
+  name: string;
+  id: number | string;
+  disabled?: boolean;
+};
+export type Tabs = Array<Tab>;
+
+export type TabLineConfig = {
+  width: number;
+  thickness: number;
+  equispaced: boolean;
+};
+
+export interface TabProps {
+  /**
+   * Tab 数组
+   * Array<{name: string; id: number | string; disabled?: boolean;}>
+   */
+  tabs: Tabs;
+  /**
+   * 当前项
+   * @default 0
+   */
+  current?: number;
+  /**
+   * tabchange 事件
+   */
+  onTabChange?: (current: number, item: Tab) => void;
+  /**
+   * 底部线条配置
+   * { width?: number; thickness?: number; quispaced?: boolean; }
+   * @default { width: 50, thickness: 2, equispaced: false }
+   */
+  tabLineConfig?: TabLineConfig;
+  children: ReactChildren;
+}
+
+const clsPrefix = `${theme[`global-prefix`]}-tab`;
+
+const Tab: FC<TabProps> = ({
+  tabs,
+  current: cur = 0,
+  onTabChange,
+  tabLineConfig = { width: 50, thickness: 2, equispaced: false },
+  children,
+}) => {
+  // --- tab variables ---
+  const { width: tabLineWidth = 50, thickness = 2, equispaced = false } = useMemo(
+    () => tabLineConfig,
+    [tabLineConfig],
+  );
+  const [current, setCurrent] = useState(cur);
+  const [moveDistance, setMoveDistance] = useState(0);
+  const navRef = useRef<HTMLAnchorElement>(null);
+  // --- content variables ---
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentWidth, setContentWidth] = useState(0);
+
+  // --- tab op START ---
+  useEffect(() => {
+    if (cur !== undefined && cur !== current) setCurrent(cur);
+  }, [cur, current]);
+
+  const calcDistance = useCallback(() => {
+    const children = (navRef.current as HTMLElement).childNodes;
+    if (children && children.length > 0) {
+      let distance =
+        ((children[0] as HTMLAnchorElement).getBoundingClientRect().width - tabLineWidth) / 2;
+      for (let i = 1; i < current + 1; i += 1) {
+        const childWidth = (children[i] as HTMLAnchorElement).getBoundingClientRect().width;
+        const lastChildWidth = (children[i - 1] as HTMLAnchorElement).getBoundingClientRect().width;
+        const d = (childWidth + lastChildWidth) / 2;
+        distance += d;
+      }
+      setMoveDistance(distance);
+    }
+  }, [current, tabLineWidth]);
+
+  useEffect(() => {
+    calcDistance();
+  }, [calcDistance]);
+
+  function clickHandler() {
+    const { idx, item } = this;
+    if (!item.disabled) {
+      setCurrent(idx);
+      if (typeof onTabChange === 'function') onTabChange(idx, item);
+    }
+  }
+
+  const handleTabClick = useCallback(debounce(clickHandler, 200), []);
+  // --- tab op END ---
+
+  // --- content op START ---
+  const calcContentWidth = useCallback(() => {
+    const { width } = (contentRef.current as HTMLDivElement).getBoundingClientRect();
+    setContentWidth(width);
+  }, []);
+
+  useEffect(() => {
+    calcContentWidth();
+  }, [calcContentWidth]);
+  // --- content op END ---
+
+  // resize
+  useResize(() => {
+    calcDistance();
+    calcContentWidth();
+  }, 200);
+
+  /* eslint jsx-a11y/anchor-is-valid:0 */
+  return (
+    <>
+      <nav className={`${clsPrefix}-outer`} ref={navRef}>
+        {isArrayNotEmpty(tabs) && (
+          <>
+            {tabs.map(({ id, name, ...rest }, idx) => (
+              <a key={id} onClick={handleTabClick.bind({ idx, item: { id, name, ...rest } })}>
+                <span
+                  className={classNames(`${clsPrefix}-x`, {
+                    [`${clsPrefix}-x-active`]: idx === current && !rest.disabled,
+                    [`${clsPrefix}-x-equispaced`]: equispaced,
+                    [`${clsPrefix}-x-disabled`]: rest.disabled,
+                  })}
+                  style={equispaced ? { width: `calc(100% / ${tabs.length})` } : {}}
+                >
+                  {name}
+                </span>
+              </a>
+            ))}
+            <div
+              className={`${clsPrefix}-line`}
+              style={{
+                width: tabLineWidth,
+                height: thickness,
+                transform: `translateX(${moveDistance}px)`,
+              }}
+            />
+          </>
+        )}
+      </nav>
+      <div className={`${clsPrefix}-contents`} ref={contentRef}>
+        <div
+          className={`${clsPrefix}-parts-container`}
+          style={{ transform: `translateX(-${current * contentWidth}px)` }}
+        >
+          {React.Children.map(children, child => (
+            <div className={`${clsPrefix}-part`} style={{ width: `${contentWidth}px` }}>
+              {child}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Tab;

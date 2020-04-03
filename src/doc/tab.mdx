@@ -1,0 +1,50 @@
+---
+name: Tab
+route: /components/tab
+menu: Components
+---
+
+import { Props, Playground } from 'docz';
+import { Tab } from '../';
+
+# Tab
+
+## Tab Props
+
+<Props of={Tab} />
+
+## Tab 示例
+<Playground>
+    {() => {
+        const [current, setCurrent] = React.useState(0);
+        const tabs = [{ name: 'Tab1', id: 0 }, { name: 'Tab2', id: 1 }, { name: 'Tab3', id: 2 }];
+        return (
+            <div style={{ padding: 20, fontSize: 14 }}>
+            <Tab
+                tabs={tabs}
+                current={current}
+                onTabChange={(current, item) => setCurrent(current)}
+            >
+                <div>
+                    <h3>tab 1</h3>
+                    <p>超级超级多内容超级超级多内容</p>
+                    <p>超级超级多内容</p>
+                    <p>超级超级多内容</p>
+                </div>
+                <div>
+                    <h3>tab 2</h3>
+                    <p>超级超级多内容超级超级多内容</p>
+                    <p>超级超级多内容</p>
+                    <p>超级超级多内容</p>
+                </div>
+                <div>
+                    <h3>tab 3</h3>
+                    <p>超级超级多内容超级超级多内容</p>
+                    <p>超级超级多内容</p>
+                    <p>超级超级多内容</p>
+                </div>
+            </Tab>
+            </div>
+        )
+    }}
+</Playground>
