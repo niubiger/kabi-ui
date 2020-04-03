@@ -9,6 +9,7 @@
       "skipLibCheck": false,
       "noEmit": true,
       "jsx": "react",
-      "suppressImplicitAnyIndexErrors": true
+      "suppressImplicitAnyIndexErrors": true,
+      "noImplicitThis": false
     }
 }

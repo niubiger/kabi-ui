@@ -1,0 +1,62 @@
+---
+name: Tab
+route: /components/tab
+menu: Components
+---
+
+import { Props, Playground } from 'docz';
+import { Tab, Button } from '../';
+
+# Tab
+
+## Tab Props
+
+<Props of={Tab} />
+
+## Tab 示例
+<Playground>
+    {() => {
+        const [current, setCurrent] = React.useState(0);
+        const tabs = [{ name: 'Tab1', id: 0 }, { name: 'Tab22222222222', id: 1, style: { fontSize: 18 } }, { name: 'Tab3', id: 2 }, { name: 'Tab4', id: 3, disabled: true }];
+        const [equispaced, setEquispaced] = React.useState(false);
+        const [width, setWidth] = React.useState(40);
+        return (
+            <div style={{ padding: 20, fontSize: 14 }}>
+                <h3>tabs</h3>
+                <pre>{JSON.stringify(tabs, null, '  ')}</pre>
+                <h3>equispaced: {String(equispaced)}</h3>
+                <Button onClick={() =>  setEquispaced(!equispaced)}>设为{equispaced ? '默认' : '均布'}</Button>
+                <h3>tabLineConfig</h3>
+                <h4>width: {width}</h4>
+                <Button onClick={() => setWidth(width === 'auto' ? 40 : 'auto')}>设为{width === 'auto' ? '固定宽度' : '动态宽度'}</Button>
+                <h3>example</h3>
+                <Tab
+                    tabs={tabs}
+                    current={current}
+                    onTabChange={(current, item) => setCurrent(current)}
+                    equispaced={equispaced}
+                    tabLineConfig={{ width }}
+                >
+                    <div>
+                        <h3>tab 1</h3>
+                        <p>超级超级多内容超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                    </div>
+                    <div>
+                        <h3>tab 2</h3>
+                        <p>超级超级多内容超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                    </div>
+                    <div>
+                        <h3>tab 3</h3>
+                        <p>超级超级多内容超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                        <p>超级超级多内容</p>
+                    </div>
+                </Tab>
+            </div>
+        )
+    }}
+</Playground>

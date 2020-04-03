@@ -27,3 +27,11 @@ export const getOffset = (ele: IElement, target: HTMLElement = document.body): O
 
   return { top: offsetTop, left: offsetLeft };
 };
+
+export function isArrayNotEmpty(arr: any): boolean {
+  return Array.isArray(arr) && arr.length > 0;
+}
+
+export function ElimateUnitAsNumber(str: string, unit: string): number {
+  return Number(str.replace(new RegExp(unit, 'g'), ''));
+}
