@@ -47,15 +47,28 @@
   }
 
   &-contents {
-    overflow-y: hidden;
+    overflow: hidden;
   }
 
   &-parts-container {
     text-align: left;
-    width: 9999px;
+    width: 999999px;
+    width: max-content;
     transition: transform 0.3s $bezier-fastout-slowin;
+    will-change: transform;
   }
   &-part {
     display: inline-block;
+    transition: opacity 0.4s;
+    &-active {
+      visibility: visible;
+      opacity: 1;
+    }
+    &-inactive {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      height: 0;
+    }
   }
 }

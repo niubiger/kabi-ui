@@ -209,8 +209,14 @@ const Tab: FC<TabProps> = ({
           className={`${clsPrefix}-parts-container`}
           style={{ transform: `translateX(-${current * contentWidth}px)` }}
         >
-          {React.Children.map(children, child => (
-            <div className={`${clsPrefix}-part`} style={{ width: `${contentWidth}px` }}>
+          {React.Children.map(children, (child, idx) => (
+            <div
+              className={classNames(
+                `${clsPrefix}-part`,
+                idx === current ? `${clsPrefix}-part-active` : `${clsPrefix}-part-inactive`,
+              )}
+              style={{ width: `${contentWidth}px` }}
+            >
               {child}
             </div>
           ))}
