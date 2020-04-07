@@ -1,0 +1,81 @@
+@import '../../config/variables.scss';
+
+$normal-size: 20px;
+$normal-thumb-size: $normal-size;
+$normal-track-width: 36px;
+$normal-track-height: 12px;
+
+.#{$global-prefix}-switch {
+  &-outer {
+    height: $normal-size;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    cursor: pointer;
+  }
+  &-disabled {
+    cursor: not-allowed;
+  }
+  &-checked > &-wrapper {
+    color: $main-color;
+    transform: translate(calc(#{$normal-track-width} - #{$normal-thumb-size}), -50%);
+  }
+  &-checked > &-track {
+    background-color: rgba($color: $main-color, $alpha: 0.5);
+  }
+
+  &-disabled &-thumb {
+    background-color: $text-color-disabled;
+  }
+  &-disabled &-track {
+    background-color: rgba($color: $text-color-disabled, $alpha: 0.5);
+  }
+
+  &-wrapper {
+    position: absolute;
+    color: $white;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s $bezier-fastout-slowin;
+  }
+  &-x {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    visibility: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+  &-thumb {
+    display: block;
+    width: $normal-thumb-size;
+    height: $normal-thumb-size;
+    border-radius: $normal-thumb-size / 2;
+    background-color: currentColor;
+    box-shadow: 0 2px 4px $shadow-color;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  &-outer:hover &-thumb {
+    transform: scale(1.05);
+    box-shadow: 0 2px 6px $shadow-color;
+    transform-origin: left;
+  }
+  &-outer:active &-thumb {
+    transform: scale(0.95);
+    transform-origin: left;
+    box-shadow: 0 1px 5px $shadow-color;
+  }
+  &-checked:active &-thumb,
+  &-checked:hover &-thumb {
+    transform-origin: right;
+  }
+
+  &-track {
+    width: $normal-track-width;
+    height: $normal-track-height;
+    background-color: $shadow-color;
+    border-radius: $normal-track-height / 2;
+    transition: background-color 0.3s $bezier-fastout-slowin;
+  }
+}

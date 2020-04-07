@@ -17,7 +17,7 @@ export default {
     'Getting started',
     {
       name: 'Components',
-      menu: ['Button', 'Input', 'Popover', 'Message'],
+      menu: ['Button', 'Input', 'Popover', 'Message', 'Switch'],
     },
   ],
 };

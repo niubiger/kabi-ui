@@ -1,0 +1,29 @@
+---
+name: Switch
+route: /components/switch
+menu: Components
+---
+
+import { Props, Playground } from 'docz';
+import { Switch } from '../';
+
+# Switch
+
+## Switch Props
+
+<Props of={Switch} />
+
+## Switch 示例
+<Playground>
+    {() => {
+        const [checked, setChecked] = React.useState(false);
+        return (
+            <div style={{ padding: 20, display: 'flex', justifyContent: 'space-between' }}>
+                <Switch disabled />
+                <Switch defaultChecked disabled />
+                <Switch defaultChecked />
+                <Switch checked={checked} onChange={e => setChecked(e.target.checked)} />
+            </div>
+        )
+    }}
+</Playground>
