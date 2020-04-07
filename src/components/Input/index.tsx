@@ -1,11 +1,15 @@
-import React, { FC, ChangeEvent, useState, CSSProperties, InputHTMLAttributes } from 'react';
+import React, {
+  FC,
+  ChangeEvent,
+  useState,
+  CSSProperties,
+  InputHTMLAttributes,
+  ChangeEventHandler,
+} from 'react';
 import classNames from 'classnames';
 import theme from '../../config/theme';
 import './index.scss';
 
-interface Target {
-  value: string;
-}
 export interface InputProps {
   /**
    * 输入框标题
@@ -18,7 +22,7 @@ export interface InputProps {
   /**
    * change事件
    */
-  onChange?: (val: string) => void;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   /**
    * 默认值
    */
@@ -40,7 +44,7 @@ export interface InputProps {
   /**
    * 其他 <input> 的原生属性
    */
-  props?: InputHTMLAttributes<Target>;
+  props?: InputHTMLAttributes<HTMLInputElement>;
 }
 
 const clsPrefix = `${theme['global-prefix']}-input`;
@@ -56,9 +60,9 @@ const Input: FC<InputProps> = ({
   ...props
 }) => {
   const [val, setVal] = useState(defaultValue || value);
-  const handleChange = (e: ChangeEvent<Target>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setVal(e.target.value);
-    if (typeof onChange === 'function') onChange(e.target.value);
+    if (typeof onChange === 'function') onChange(e);
   };
   return (
     <span className={`${clsPrefix}-outer`} style={outerStyle}>

@@ -22,7 +22,7 @@ import { Input } from '../';
                     <Input
                         label="姓名"
                         value={val}
-                        onChange={val => setVal(val)}
+                        onChange={e => setVal(e.target.value)}
                     />
                     <Input label="手机" defaultValue="13333333" />
                     <Input label="性别" disabled />
