@@ -5,7 +5,7 @@ menu: Components
 ---
 
 import { Props, Playground } from 'docz';
-import { Tab, Button } from '../';
+import { Tab, Button, Switch } from '../';
 
 # Tab
 
@@ -25,7 +25,7 @@ import { Tab, Button } from '../';
                 <h3>tabs</h3>
                 <pre>{JSON.stringify(tabs, null, '  ')}</pre>
                 <h3>equispaced: {String(equispaced)}</h3>
-                <Button onClick={() =>  setEquispaced(!equispaced)}>设为{equispaced ? '默认' : '均布'}</Button>
+                <Switch checked={equispaced} onChange={e => setEquispaced(!equispaced)} />
                 <h3>tabLineConfig</h3>
                 <h4>width: {width}</h4>
                 <Button onClick={() => setWidth(width === 'auto' ? 40 : 'auto')}>设为{width === 'auto' ? '固定宽度' : '动态宽度'}</Button>
