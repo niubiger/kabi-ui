@@ -42,6 +42,10 @@ export interface InputProps {
    */
   outerStyle?: CSSProperties;
   /**
+   * 额外样式类名
+   */
+  className?: string;
+  /**
    * 其他 <input> 的原生属性
    */
   props?: InputHTMLAttributes<HTMLInputElement>;
@@ -57,6 +61,7 @@ const Input: FC<InputProps> = ({
   disabled,
   variant = 'normal',
   outerStyle,
+  className,
   ...props
 }) => {
   const [val, setVal] = useState(defaultValue || value);
@@ -65,7 +70,7 @@ const Input: FC<InputProps> = ({
     if (typeof onChange === 'function') onChange(e);
   };
   return (
-    <span className={`${clsPrefix}-outer`} style={outerStyle}>
+    <span className={classNames(`${clsPrefix}-outer`, className)} style={outerStyle}>
       <span
         className={classNames(`${clsPrefix}-wrapper`, `${clsPrefix}-wrapper-${variant}`, {
           [`${clsPrefix}-wrapper-filled`]: !!String(val),

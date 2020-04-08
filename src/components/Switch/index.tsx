@@ -33,6 +33,10 @@ export interface SwitchProps {
    */
   disabled?: boolean;
   /**
+   * 额外的样式类名
+   */
+  className?: string;
+  /**
    * 其他 <input> 的原生属性
    */
   props?: InputHTMLAttributes<HTMLInputElement>;
@@ -45,6 +49,7 @@ const Switch: FC<SwitchProps> = ({
   onChange,
   defaultChecked = false,
   disabled = false,
+  className,
   ...props
 }) => {
   const [checked, setChecked] = useState(defaultChecked);
@@ -78,7 +83,7 @@ const Switch: FC<SwitchProps> = ({
 
   return (
     <span
-      className={classNames(`${clsPrefix}-outer`, {
+      className={classNames(`${clsPrefix}-outer`, className, {
         [`${clsPrefix}-checked`]: checked,
         [`${clsPrefix}-disabled`]: disabled,
       })}

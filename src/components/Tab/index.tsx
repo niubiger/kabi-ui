@@ -68,7 +68,14 @@ export interface TabProps {
    * @default { width: 50, thickness: 2 }
    */
   tabLineConfig?: TabLineConfig;
-  children: ReactChildren;
+  /**
+   * tab容器的额外样式类名
+   */
+  tabClassName?: string;
+  /**
+   * 内容
+   */
+  children?: ReactChildren;
 }
 
 const clsPrefix = `${theme[`global-prefix`]}-tab`;
@@ -79,6 +86,7 @@ const Tab: FC<TabProps> = ({
   onTabChange,
   equispaced = false,
   tabLineConfig = { width: 50, thickness: 2 },
+  tabClassName,
   children,
 }) => {
   // --- tab variables ---
@@ -173,7 +181,7 @@ const Tab: FC<TabProps> = ({
   /* eslint jsx-a11y/anchor-is-valid:0 */
   return (
     <>
-      <nav className={`${clsPrefix}-outer`} ref={navRef}>
+      <nav className={classNames(`${clsPrefix}-outer`, tabClassName)} ref={navRef}>
         {isArrayNotEmpty(tabs) && (
           <>
             {tabs.map(({ id, name, style, ...rest }, idx) => (
@@ -205,22 +213,24 @@ const Tab: FC<TabProps> = ({
         )}
       </nav>
       <div className={`${clsPrefix}-contents`} ref={contentRef}>
-        <div
-          className={`${clsPrefix}-parts-container`}
-          style={{ transform: `translateX(-${current * contentWidth}px)` }}
-        >
-          {React.Children.map(children, (child, idx) => (
-            <div
-              className={classNames(
-                `${clsPrefix}-part`,
-                idx === current ? `${clsPrefix}-part-active` : `${clsPrefix}-part-inactive`,
-              )}
-              style={{ width: `${contentWidth}px` }}
-            >
-              {child}
-            </div>
-          ))}
-        </div>
+        {React.Children.count(children) > 0 && (
+          <div
+            className={`${clsPrefix}-parts-container`}
+            style={{ transform: `translateX(-${current * contentWidth}px)` }}
+          >
+            {React.Children.map(children, (child, idx) => (
+              <div
+                className={classNames(
+                  `${clsPrefix}-part`,
+                  idx === current ? `${clsPrefix}-part-active` : `${clsPrefix}-part-inactive`,
+                )}
+                style={{ width: `${contentWidth}px` }}
+              >
+                {child}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
