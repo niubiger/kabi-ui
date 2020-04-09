@@ -5,7 +5,7 @@ menu: Components
 ---
 
 import { Props, Playground } from 'docz';
-import { Input } from '../';
+import { Input, Button } from '../';
 
 # Input
 
@@ -32,4 +32,23 @@ import { Input } from '../';
                 </div>
             );
         }}
+</Playground>
+
+## 方法
+
+通过ref获取Input实例，调用 focus 和 blur 方法
+
+<Playground>
+    {() => {
+        const myRef = React.useRef();
+        return (
+            <div style={{padding: 20, fontSize: 14}}>
+                <Input label="姓名" ref={myRef} />
+                <h3>focus</h3>
+                <Button onClick={() => { myRef.current.focus() }}>聚焦</Button>
+                <h3>blur</h3>
+                <Button onClick={() => { myRef.current.blur() }}>失焦</Button>
+            </div>
+        );
+    }}
 </Playground>

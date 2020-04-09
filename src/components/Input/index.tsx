@@ -1,10 +1,13 @@
 import React, {
-  FC,
   ChangeEvent,
   useState,
   CSSProperties,
   InputHTMLAttributes,
   ChangeEventHandler,
+  Ref,
+  ForwardRefExoticComponent,
+  useRef,
+  useImperativeHandle,
 } from 'react';
 import classNames from 'classnames';
 import theme from '../../config/theme';
@@ -53,43 +56,58 @@ export interface InputProps {
 
 const clsPrefix = `${theme['global-prefix']}-input`;
 
-const Input: FC<InputProps> = ({
-  label,
-  value = '',
-  onChange,
-  defaultValue = '',
-  disabled,
-  variant = 'normal',
-  outerStyle,
-  className,
-  ...props
-}) => {
-  const [val, setVal] = useState(defaultValue || value);
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setVal(e.target.value);
-    if (typeof onChange === 'function') onChange(e);
-  };
-  return (
-    <span className={classNames(`${clsPrefix}-outer`, className)} style={outerStyle}>
-      <span
-        className={classNames(`${clsPrefix}-wrapper`, `${clsPrefix}-wrapper-${variant}`, {
-          [`${clsPrefix}-wrapper-filled`]: !!String(val),
-          [`${clsPrefix}-wrapper-disabled`]: !!disabled,
-        })}
-      >
-        <input
-          {...props}
-          value={val}
-          onChange={handleChange}
-          disabled={disabled}
-          placeholder=""
-          className={`${clsPrefix}-x`}
-        />
-        {!!label && <label className={`${clsPrefix}-label`}>{label}</label>}
-        <span className={`${clsPrefix}-line`} />
+const Input: ForwardRefExoticComponent<InputProps> = React.forwardRef(
+  (
+    {
+      label,
+      value = '',
+      onChange,
+      defaultValue = '',
+      disabled,
+      variant = 'normal',
+      outerStyle,
+      className,
+      ...props
+    },
+    ref: Ref<Partial<HTMLInputElement>>,
+  ) => {
+    const [val, setVal] = useState(defaultValue || value);
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+      setVal(e.target.value);
+      if (typeof onChange === 'function') onChange(e);
+    };
+    const inputRef = useRef<HTMLInputElement>(null);
+    useImperativeHandle(ref, () => ({
+      focus: opt => {
+        (inputRef.current as HTMLInputElement).focus(opt);
+      },
+      blur: () => {
+        (inputRef.current as HTMLInputElement).blur();
+      },
+    }));
+    return (
+      <span className={classNames(`${clsPrefix}-outer`, className)} style={outerStyle}>
+        <span
+          className={classNames(`${clsPrefix}-wrapper`, `${clsPrefix}-wrapper-${variant}`, {
+            [`${clsPrefix}-wrapper-filled`]: !!String(val),
+            [`${clsPrefix}-wrapper-disabled`]: !!disabled,
+          })}
+        >
+          <input
+            {...props}
+            ref={inputRef}
+            value={val}
+            onChange={handleChange}
+            disabled={disabled}
+            placeholder=""
+            className={`${clsPrefix}-x`}
+          />
+          {!!label && <label className={`${clsPrefix}-label`}>{label}</label>}
+          <span className={`${clsPrefix}-line`} />
+        </span>
       </span>
-    </span>
-  );
-};
+    );
+  },
+);
 
 export default Input;
