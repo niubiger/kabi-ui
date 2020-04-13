@@ -1,16 +1,18 @@
 import React, {
   FC,
-  useState,
   useRef,
   useEffect,
   useMemo,
   useCallback,
   ReactChildren,
   CSSProperties,
+  useReducer,
+  Reducer,
 } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import { isArrayNotEmpty, ElimateUnitAsNumber } from '../../utils';
+import model, { Action } from './model';
+import { isArrayNotEmpty } from '../../utils';
 import { useResize } from '../../utils/hooks';
 import theme from '../../config/theme';
 import './index.scss';
@@ -91,80 +93,52 @@ const Tab: FC<TabProps> = ({
 }) => {
   // --- tab variables ---
   const { width: tabLineWidth = 50, thickness = 2 } = useMemo(() => tabLineConfig, [tabLineConfig]);
-  const [current, setCurrent] = useState(cur);
-  const [moveDistance, setMoveDistance] = useState(0);
   const navRef = useRef<HTMLAnchorElement>(null);
-  const [dyTabLineWidth, setDyTabLineWidth] = useState(tabLineWidth);
   // --- content variables ---
   const contentRef = useRef<HTMLDivElement>(null);
-  const [contentWidth, setContentWidth] = useState(0);
+
+  const [state, dispatch] = useReducer<Reducer<any, Action>>(model.reducer, model.initState);
 
   // --- tab op START ---
   useEffect(() => {
-    if (cur !== undefined && cur !== current) setCurrent(cur);
-  }, [cur, current]);
+    if (cur !== undefined && cur !== state.current)
+      dispatch({ type: 'setCurrent', payload: { current: cur } });
+  }, [cur]);
+
+  useEffect(() => {
+    const children = (navRef.current as HTMLElement).childNodes;
+    dispatch({ type: 'setMoveDistance', payload: { tabLineWidth, children } });
+  }, [equispaced]);
 
   const calcDistance = useCallback(() => {
     const children = (navRef.current as HTMLElement).childNodes;
-    if (children && children.length > 0) {
-      // fixed tab line width
-      if (tabLineWidth !== 'auto') {
-        setDyTabLineWidth(tabLineWidth);
-        let distance =
-          ((children[0] as HTMLAnchorElement).getBoundingClientRect().width -
-            (dyTabLineWidth as number)) /
-          2;
-        for (let i = 1; i < current + 1; i += 1) {
-          const childWidth = (children[i] as HTMLAnchorElement).getBoundingClientRect().width;
-          const lastChildWidth = (children[i - 1] as HTMLAnchorElement).getBoundingClientRect()
-            .width;
-          const d = (childWidth + lastChildWidth) / 2;
-          distance += d;
-        }
-        setMoveDistance(distance);
-        // dynamic tab line width
-      } else {
-        const { width } = (children[current] as HTMLAnchorElement).getBoundingClientRect();
-        const { paddingLeft, paddingRight } = getComputedStyle(
-          (children[current] as HTMLAnchorElement).children[0] as HTMLSpanElement,
-        );
-        setDyTabLineWidth(
-          width - ElimateUnitAsNumber(paddingLeft, 'px') - ElimateUnitAsNumber(paddingRight, 'px'),
-        );
-
-        const { paddingLeft: firstPaddingLeft } = getComputedStyle(
-          (children[0] as HTMLAnchorElement).children[0] as HTMLSpanElement,
-        );
-        let distance = ElimateUnitAsNumber(firstPaddingLeft, 'px');
-        for (let i = 1; i < current + 1; i += 1) {
-          const lastChildWidth = (children[i - 1] as HTMLAnchorElement).getBoundingClientRect()
-            .width;
-          distance += lastChildWidth;
-        }
-        setMoveDistance(distance);
-      }
-    }
-  }, [current, dyTabLineWidth, tabLineWidth, equispaced]);
+    dispatch({ type: 'setTabLineWidth', payload: { tabLineWidth, children } });
+    dispatch({ type: 'setMoveDistance', payload: { tabLineWidth, children } });
+  }, [tabLineWidth]);
 
   useEffect(() => {
     calcDistance();
   }, [calcDistance]);
 
-  function clickHandler() {
-    const { idx, item } = this;
-    if (!item.disabled) {
-      setCurrent(idx);
-      if (typeof onTabChange === 'function') onTabChange(idx, item);
-    }
-  }
+  const clickHandler = useCallback(
+    function() {
+      const { idx, item } = this;
+      if (!item.disabled) {
+        dispatch({ type: 'setCurrent', payload: { current: idx } });
+        calcDistance();
+        if (typeof onTabChange === 'function') onTabChange(idx, item);
+      }
+    },
+    [onTabChange, calcDistance],
+  );
 
-  const handleTabClick = useCallback(debounce(clickHandler, 200), []);
+  const handleTabClick = useCallback(debounce(clickHandler, 200), [clickHandler]);
   // --- tab op END ---
 
   // --- content op START ---
   const calcContentWidth = useCallback(() => {
     const { width } = (contentRef.current as HTMLDivElement).getBoundingClientRect();
-    setContentWidth(width);
+    dispatch({ type: 'setContentWidth', payload: { width } });
   }, []);
 
   useEffect(() => {
@@ -191,7 +165,7 @@ const Tab: FC<TabProps> = ({
               >
                 <span
                   className={classNames(`${clsPrefix}-x`, {
-                    [`${clsPrefix}-x-active`]: idx === current && !rest.disabled,
+                    [`${clsPrefix}-x-active`]: idx === state.current && !rest.disabled,
                     [`${clsPrefix}-x-equispaced`]: equispaced,
                     [`${clsPrefix}-x-disabled`]: rest.disabled,
                   })}
@@ -204,9 +178,9 @@ const Tab: FC<TabProps> = ({
             <div
               className={`${clsPrefix}-line`}
               style={{
-                width: dyTabLineWidth,
+                width: state.dyTabLineWidth,
                 height: thickness,
-                transform: `translateX(${moveDistance}px)`,
+                transform: `translateX(${state.moveDistance}px)`,
               }}
             />
           </>
@@ -216,15 +190,15 @@ const Tab: FC<TabProps> = ({
         {React.Children.count(children) > 0 && (
           <div
             className={`${clsPrefix}-parts-container`}
-            style={{ transform: `translateX(-${current * contentWidth}px)` }}
+            style={{ transform: `translateX(-${state.current * state.contentWidth}px)` }}
           >
             {React.Children.map(children, (child, idx) => (
               <div
                 className={classNames(
                   `${clsPrefix}-part`,
-                  idx === current ? `${clsPrefix}-part-active` : `${clsPrefix}-part-inactive`,
+                  idx === state.current ? `${clsPrefix}-part-active` : `${clsPrefix}-part-inactive`,
                 )}
-                style={{ width: `${contentWidth}px` }}
+                style={{ width: `${state.contentWidth}px` }}
               >
                 {child}
               </div>

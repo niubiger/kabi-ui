@@ -13,5 +13,5 @@ export function useResize(callback: EventListener, wait: number) {
     return () => {
       window.removeEventListener('resize', throttled);
     };
-  }, [callback, wait]);
+  }, []);
 }
