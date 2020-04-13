@@ -1,0 +1,79 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var path = require('path');
+var util = require('util');
+var writeFile = util.promisify(fs.writeFile);
+
+var componentName = process.argv.slice(2)[0];
+
+if (!componentName) {
+    throw new Error('[Error] Component name is required.')
+}
+
+var componentDir = path.resolve('src', 'components', componentName);
+var tsxTpl = [
+    "import React, { FC } from 'react';",
+    "import theme from '../../config/theme';",
+    "import './index.scss';",
+    "",
+    "export interface " + componentName + "Props {",
+    "  ",
+    "}",
+    "",
+    "const clsPrefix = `${theme['global-prefix']}-" + componentName.toLowerCase() + "`;",
+    "",
+    "const " + componentName + ": FC<" + componentName +"Props> = ({",
+    "  ",
+    "}) => {",
+    "  return (",
+    "    <div className={`${clsPrefix}-outer`}></div>",
+    "  );",
+    "};",
+    "",
+    "export default " + componentName + ";",
+].join('\n');
+var scssTpl = [
+    "@import '../../config/variables.scss';",
+    "",
+    ".#{$global-prefix}-" + componentName.toLowerCase() +" {",
+    "  &-outer {",
+    "    ",
+    "  }",
+    "}",
+].join('\n');
+
+function writeFiles(cb) {
+    if (!Promise) throw new Error('[Error] Please update Node.');
+
+    Promise.all([writeFile(path.join(componentDir, 'index.tsx'), tsxTpl), writeFile(path.join(componentDir, 'index.scss'), scssTpl)])
+    .then(cb)
+    .catch(function(err) {
+        throw err;
+    });
+}
+
+fs.mkdir(componentDir, function(err) {
+    if (err) {
+        if (err.code === 'EEXIST') {
+            console.log('[Info] Dir ' + componentName + ' already exists in "src/components", REWRITE files? [y/n]');
+            process.stdin.on('data', function(data) {
+                var input = String(data).trim();
+                if (input === 'y' || input === 'Y') {
+                    writeFiles(function() {
+                        console.log('[Success] Files in dir "src/components/' + componentName + '" are rewritten.');
+                        process.exit(0);
+                    });
+                }
+                if (input === 'n' || input === 'N') {
+                    console.log('[Info] Files in dir "src/components/' + componentName + '" are NOT rewritten.');
+                    process.exit(0);
+                }
+            });
+        } else throw err;
+    } else {
+        writeFiles(function() {
+            console.log('[Success] ' + componentName + ' is generated.');
+        });
+    }
+});

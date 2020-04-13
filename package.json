@@ -12,6 +12,9 @@
     "doc:build": "docz build",
     "doc:serve": "docz build && docz serve"
   },
+  "bin": {
+    "gen": "bin/gen"
+  },
   "files": [
     "umd",
     "lib",
