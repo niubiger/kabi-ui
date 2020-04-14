@@ -71,7 +71,7 @@ const Popover: FC<PopoverProps> = ({
   useEffect(() => {
     _container.style.position = 'relative';
     return () => {
-      _container.style.position = 'static';
+      _container.style.position = '';
     };
   }, [_container]);
 

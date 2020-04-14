@@ -2,6 +2,12 @@
 卡比UI是一个React组件库。
 ## 项目代码
 入口为 `src/index.js`，组件代码放到 `src/components` 下。
+### 初始化组件
+使用脚本 `gen {MyComponent}` 来初始化组件，该命令会在 *src/components* 下生成 *MyComponent* 目录，并含有 **index.tsx** 及 **index.scss** 初始代码。
+```sh
+npm link # 或 sudo npm link
+gen MyComponent
+```
 
 ## 文档相关
 ### 开发运行
@@ -26,4 +32,4 @@
     mv /Users/username/Download/libvips-8.9.1-darwin-x64.tar.gz /Users/username/.npm/_libvips
     ```
 ## 待增加
-1. 对 *cssmodules* 的支持
+暂无
