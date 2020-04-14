@@ -105,16 +105,11 @@ const Tab: FC<TabProps> = ({
       dispatch({ type: 'setCurrent', payload: { current: cur } });
   }, [cur]);
 
-  useEffect(() => {
-    const children = (navRef.current as HTMLElement).childNodes;
-    dispatch({ type: 'setMoveDistance', payload: { tabLineWidth, children } });
-  }, [equispaced]);
-
   const calcDistance = useCallback(() => {
     const children = (navRef.current as HTMLElement).childNodes;
     dispatch({ type: 'setTabLineWidth', payload: { tabLineWidth, children } });
     dispatch({ type: 'setMoveDistance', payload: { tabLineWidth, children } });
-  }, [tabLineWidth]);
+  }, [tabLineWidth, equispaced]);
 
   useEffect(() => {
     calcDistance();
