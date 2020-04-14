@@ -3,77 +3,178 @@
 var fs = require('fs');
 var path = require('path');
 var util = require('util');
+var rl = require('readline').createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 var writeFile = util.promisify(fs.writeFile);
+var readFile = util.promisify(fs.readFile);
+var appendFile = util.promisify(fs.appendFile);
+var open = util.promisify(fs.open);
 
 var componentName = process.argv.slice(2)[0];
 
 if (!componentName) {
-    throw new Error('[Error] Component name is required.')
+  throw new Error('[Error] Component name is required.')
 }
 
-var componentDir = path.resolve('src', 'components', componentName);
+if (!Promise) throw new Error('[Error] Please update Node.');
+
+var srcDir = path.resolve('src');
+var componentDir = path.join(srcDir, 'components', componentName);
+var docDir = path.join(srcDir, 'doc');
 var tsxTpl = [
-    "import React, { FC } from 'react';",
-    "import theme from '../../config/theme';",
-    "import './index.scss';",
-    "",
-    "export interface " + componentName + "Props {",
-    "  ",
-    "}",
-    "",
-    "const clsPrefix = `${theme['global-prefix']}-" + componentName.toLowerCase() + "`;",
-    "",
-    "const " + componentName + ": FC<" + componentName +"Props> = ({",
-    "  ",
-    "}) => {",
-    "  return (",
-    "    <div className={`${clsPrefix}-outer`}></div>",
-    "  );",
-    "};",
-    "",
-    "export default " + componentName + ";",
+  "import React, { FC } from 'react';",
+  "import theme from '../../config/theme';",
+  "import './index.scss';",
+  "",
+  "export interface " + componentName + "Props {",
+  "  ",
+  "}",
+  "",
+  "const clsPrefix = `${theme['global-prefix']}-" + componentName.toLowerCase() + "`;",
+  "",
+  "const " + componentName + ": FC<" + componentName + "Props> = ({",
+  "  ",
+  "}) => {",
+  "  return (",
+  "    <div className={`${clsPrefix}-outer`}></div>",
+  "  );",
+  "};",
+  "",
+  "export default " + componentName + ";",
 ].join('\n');
 var scssTpl = [
-    "@import '../../config/variables.scss';",
-    "",
-    ".#{$global-prefix}-" + componentName.toLowerCase() +" {",
-    "  &-outer {",
-    "    ",
-    "  }",
-    "}",
+  "@import '../../config/variables.scss';",
+  "",
+  ".#{$global-prefix}-" + componentName.toLowerCase() + " {",
+  "  &-outer {",
+  "    ",
+  "  }",
+  "}",
+].join('\n');
+var entryExp = "export { default as " + componentName + " } from './components/" + componentName + "';";
+var docTpl = [
+  "---",
+  "name: " + componentName,
+  "route: /components/" + componentName.toLowerCase(),
+  "menu: Components",
+  "---",
+  "",
+  "import { Props, Playground } from 'docz';",
+  "import { " + componentName + " } from '../';",
+  "",
+  "# " + componentName,
+  "",
+  "## " + componentName + " Props",
+  "",
+  "<Props of={" + componentName + "} />",
+  "",
+  "## " + componentName + " 示例",
+  "<Playground>",
+  "",
+  "</Playground>"
 ].join('\n');
 
-function writeFiles(cb) {
-    if (!Promise) throw new Error('[Error] Please update Node.');
+function yOrN(q, y, n) {
+  rl.question(q, function (data) {
+    var input = data.trim();
+    if (input === 'y' || input === 'Y') {
+      rl.pause();
+      y();
+    }
+    if (input === 'n' || input === 'N') {
+      rl.pause();
+      n();
+    }
+  });
+}
 
-    Promise.all([writeFile(path.join(componentDir, 'index.tsx'), tsxTpl), writeFile(path.join(componentDir, 'index.scss'), scssTpl)])
+function appendEntryExport() {
+  var entry = path.join(srcDir, 'index.js');
+  return new Promise(function (resolve, reject) {
+    readFile(entry)
+      .then(function (data) {
+        if (data.toString().indexOf(entryExp) > -1) {
+          resolve();
+        } else {
+          appendFile(entry, entryExp + '\n')
+            .then(resolve)
+            .catch(reject);
+        }
+      })
+      .catch(reject);
+  });
+}
+
+function writeDoc() {
+  var mdx = path.join(docDir, componentName.toLowerCase() + '.mdx');
+  return new Promise(function (resolve, reject) {
+    open(mdx, 'wx')
+      .then(function () {
+        writeFile(mdx, docTpl)
+          .then(resolve)
+          .catch(reject);
+      })
+      .catch(function (err) {
+        if (err.code === 'EEXIST') {
+          yOrN(
+            '[Info] File ' + componentName.toLowerCase() + '.mdx already exists, OVERWRITE it? [y/n]',
+            function () {
+              writeFile(mdx, docTpl)
+                .then(function () {
+                  console.log('[Success] File ' + componentName.toLowerCase() + '.mdx in dir "src/doc/" is overwritten.');
+                  resolve();
+                })
+                .catch(reject);
+            },
+            function () {
+              console.log('[Info] File ' + componentName.toLowerCase() + '.mdx in dir "src/doc/" is NOT overwritten.');
+              resolve();
+            }
+          );
+        } else reject(err);
+      });
+  });
+}
+
+function writeFiles(cb) {
+  Promise.all([
+    writeFile(path.join(componentDir, 'index.tsx'), tsxTpl),
+    writeFile(path.join(componentDir, 'index.scss'), scssTpl),
+    appendEntryExport(),
+    writeDoc(),
+  ])
     .then(cb)
-    .catch(function(err) {
-        throw err;
+    .catch(function (err) {
+      throw err;
     });
 }
 
-fs.mkdir(componentDir, function(err) {
-    if (err) {
-        if (err.code === 'EEXIST') {
-            console.log('[Info] Dir ' + componentName + ' already exists in "src/components", REWRITE files? [y/n]');
-            process.stdin.on('data', function(data) {
-                var input = String(data).trim();
-                if (input === 'y' || input === 'Y') {
-                    writeFiles(function() {
-                        console.log('[Success] Files in dir "src/components/' + componentName + '" are rewritten.');
-                        process.exit(0);
-                    });
-                }
-                if (input === 'n' || input === 'N') {
-                    console.log('[Info] Files in dir "src/components/' + componentName + '" are NOT rewritten.');
-                    process.exit(0);
-                }
-            });
-        } else throw err;
-    } else {
-        writeFiles(function() {
-            console.log('[Success] ' + componentName + ' is generated.');
-        });
+fs.mkdir(componentDir, function (err) {
+  if (err) {
+    if (err.code === 'EEXIST') {
+      yOrN(
+        '[Info] Dir ' + componentName + ' already exists in "src/components", OVERWRITE files in this dir? [y/n]',
+        function () {
+          writeFiles(function () {
+            console.log('[Success] Files in dir "src/components/' + componentName + '" are overwritten.');
+            rl.close();
+          });
+        },
+        function () {
+          console.log('[Info] Files in dir "src/components/' + componentName + '" are NOT overwritten.');
+          rl.close();
+        }
+      );
+      return;
     }
+    rl.close();
+    throw err;
+  }
+
+  writeFiles(function () {
+    console.log('[Success] ' + componentName + ' is generated.');
+    rl.close();
+  });
 });
