@@ -1,0 +1,52 @@
+---
+name: DanceNumber
+route: /components/DanceNumber
+menu: Components
+---
+
+import { Props, Playground } from 'docz';
+import { DanceNumber,Message } from '../';
+
+# DanceNumber
+#### 数字动画
+## DanceNumber Props
+
+<Props of={DanceNumber} />
+
+## DanceNumber 示例
+<Playground>
+    {() => {
+         const [value, setValue] = React.useState(0);
+         const timerRef=React.useRef(null);
+         React.useEffect(()=>{
+             clearInterval(timerRef.current);
+             timerRef.current=setInterval(()=>{
+                 setValue((Math.random()*1000).toFixed(2));
+             },5000)
+             return ()=>{
+                clearInterval(timerRef.current);
+             }
+         },[])
+        return (
+            <>
+              <div style={{ padding: 20}}>
+                  <DanceNumber  endVal={100} />
+              </div>
+              <div style={{ padding: 20}}>
+                  <DanceNumber startVal={10} endVal={200} delay={1000}
+                  duration={2000} easing="linear" style={{fontSize:20,color:'red'}}/>
+              </div>
+              <div style={{ padding: 20}}>
+                  <DanceNumber endVal={1999.99}
+                  duration={2000} sep/>
+              </div>
+              <div style={{ padding: 20}}>
+                  <DanceNumber endVal={value}/>
+              </div>
+              <div style={{ padding: 20}}>
+                  <DanceNumber endVal={'a'} replaceNaN={<span style={{color:'red'}}>NaN</span>}/>
+              </div>
+            </>
+        );
+    }}
+</Playground>

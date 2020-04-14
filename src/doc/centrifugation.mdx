@@ -17,22 +17,28 @@ import { Centrifugation,message } from '../';
 <Playground>
     {() => {
        const menuList=[
-         {text:'菜单1',onClick:()=>{message.info('菜单1')}},
-         {text:'菜单2',onClick:()=>{message.info('菜单2')}},
-         {text:'菜单3',onClick:()=>{message.info('菜单3')}},
-         {text:'菜单4',onClick:()=>{message.info('菜单4')}},
-         {text:'菜单5',onClick:()=>{message.info('菜单5')}},
-         {text:'菜单6',onClick:()=>{message.info('菜单6')}},
+         {menu:<span style={{color:"#569CD6"}}>菜单1</span>,onClick:()=>{message.info('菜单1')}},
+         {menu:'菜单2',onClick:()=>{message.info('菜单2')}},
+         {menu:'菜单3',onClick:()=>{message.info('菜单3')}},
+         {menu:'菜单4',onClick:()=>{message.info('菜单4')}},
+         {menu:'菜单5',onClick:()=>{message.info('菜单5')}},
+         {menu:'菜单6',onClick:()=>{message.info('菜单6')}},
        ];
         return (
            <div style={{padding:20}}>
              <div style={{height:300,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <Centrifugation centerText="中心" 
-                centerRadius={30} menuList={menuList} onCenterClick={()=>message.info('中心菜单')}/>
+                <Centrifugation centerMenu={<span style={{color:'red'}}>中心</span>} centerRadius={40}
+                 menuList={menuList} onCenterClick={()=>message.info('中心菜单')} />
              </div>
              <div style={{height:300,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <Centrifugation centerText="中心" 
-                centerRadius={30} menuList={menuList.slice(0,4)} degree={90} distance={30}/>
+                <Centrifugation centerMenu="中心"
+                centerRadius={30} menuList={menuList.slice(0,4)} menuRadius={25}
+                degree={90} distance={30}/>
+             </div>
+             <div style={{height:300,display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Centrifugation centerMenu="中心"
+                centerRadius={30} menuList={menuList.slice(0,4)} menuRadius={25} startAngle={-90}
+                degree={50} distance={30} even={false}/>
              </div>
            </div>
         );

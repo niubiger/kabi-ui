@@ -3,45 +3,17 @@
   &-outer {
     position: relative;
   }
-  &-center {
-    background-color: #fff;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    font-size: 16px;
-    text-align: center;
-    color: #333;
-    transition: 0.3s;
-    cursor: pointer;
-    &-expand {
-      transform: scale(1.05);
-      .#{$global-prefix}-centrifugation-menuList {
-        top: calc(-100% - var(--distance));
-        transform: scale(1);
-        opacity: 1;
-        .#{$global-prefix}-centrifugation-menuItem {
-          @for $i from 0 to 6 {
-            &:nth-child(#{$i + 1}) {
-              transition-delay: $i * 10ms;
-              transform: rotateZ(calc(var(--degree) * #{$i})) scale(1);
-              .#{$global-prefix}-centrifugation-menuItem-text {
-                transform: rotate(calc(var(--degree) * #{$i * -1}));
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+
   &-menuList {
     position: absolute;
     list-style: none;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     border-radius: 50%;
     padding: 0;
     margin: 0;
     transition: 0.3s;
-    transform: scale(0.5);
+    transform: translate(-50%, -50%);
     opacity: 0;
   }
   &-menuItem {
@@ -57,6 +29,37 @@
     justify-content: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     transition: 0.3s;
-    transform-origin: center calc(150% + var(--distance));
+    transform-origin: center calc(var(--menuRadius) * 2 + var(--centerRadius) + var(--distance));
+  }
+  &-center {
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    text-align: center;
+    color: #333;
+    transition: 0.3s;
+    cursor: pointer;
+    &-expand {
+      transform: scale(1.05);
+      .#{$global-prefix}-centrifugation-menuList {
+        transform: translate(
+          -50%,
+          calc(-1 * var(--centerRadius) - 2 * var(--menuRadius) - var(--distance))
+        );
+        opacity: 1;
+        .#{$global-prefix}-centrifugation-menuItem {
+          @for $i from 0 to 6 {
+            &:nth-child(#{$i + 1}) {
+              transition-delay: $i * 10ms;
+              transform: rotate(calc(var(--degree) * #{$i} + var(--startAngle)));
+              .#{$global-prefix}-centrifugation-menuItem-text {
+                transform: rotate(calc(var(--degree) * #{$i * -1} - var(--startAngle)));
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

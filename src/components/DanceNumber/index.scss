@@ -1,0 +1,7 @@
+@import '../../config/variables.scss';
+.#{$global-prefix}-dancenumber {
+  &-outer {
+    color: #000;
+    font-size: $font-size-lg;
+  }
+}

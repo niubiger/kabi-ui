@@ -1,26 +1,36 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ReactNode } from 'react';
 import theme from '../../config/theme';
 import { css } from '@emotion/core';
 import './index.scss';
 interface MenuItem {
-  text: string;
+  menu: ReactNode;
   onClick?: () => void;
 }
 export interface CentrifugationProps {
   /**
    * 菜单中心文案
    */
-  centerText: string;
+  centerMenu: ReactNode;
   /**
-   * 菜单中心半径
+   * 中心菜单半径
    * @default 30
    */
   centerRadius?: number;
+  /**
+   * 其他菜单半径
+   * @default 30
+   */
+  menuRadius?: number;
   /**
    * 菜单数组(推荐最大长度6)
    * @default []
    */
   menuList: MenuItem[];
+  /**
+   * 菜单起始角度
+   * @default 0
+   */
+  startAngle?: number;
   /**
    * 菜单分布角度
    * @default 60
@@ -43,9 +53,11 @@ export interface CentrifugationProps {
 }
 const clsPrefix = `${theme['global-prefix']}-centrifugation`;
 const Centrifugation: FC<CentrifugationProps> = ({
-  centerText,
+  centerMenu,
   centerRadius = 30,
+  menuRadius = 30,
   even = true,
+  startAngle = 0,
   degree = 60,
   distance = 20,
   onCenterClick,
@@ -58,7 +70,10 @@ const Centrifugation: FC<CentrifugationProps> = ({
       css={css`
         --degree: ${even ? 360 / menuList.length : degree}deg;
         --distance: ${distance}px;
-        padding: ${2 * centerRadius + distance}px;
+        --centerRadius: ${centerRadius}px;
+        --menuRadius: ${menuRadius}px;
+        --startAngle: ${startAngle}deg;
+        padding: ${2 * menuRadius + distance}px;
       `}
       onMouseLeave={() => {
         setExpand(false);
@@ -80,15 +95,15 @@ const Centrifugation: FC<CentrifugationProps> = ({
           onCenterClick && onCenterClick();
         }}
       >
-        {centerText}
+        {centerMenu}
         <ul
           className={`${clsPrefix}-menuList`}
           css={css`
-            width: ${2 * centerRadius}px;
-            height: ${2 * centerRadius}px;
+            width: ${2 * menuRadius}px;
+            height: ${2 * menuRadius}px;
           `}
         >
-          {menuList.map(menu => {
+          {menuList.map((menu, idx) => {
             return (
               <li
                 className={`${clsPrefix}-menuItem`}
@@ -96,9 +111,9 @@ const Centrifugation: FC<CentrifugationProps> = ({
                   e.stopPropagation();
                   menu.onClick && menu.onClick();
                 }}
-                key={menu.text}
+                key={'Centrifugation_menu_' + idx}
               >
-                <span className={`${clsPrefix}-menuItem-text`}>{menu.text}</span>
+                <span className={`${clsPrefix}-menuItem-text`}>{menu.menu}</span>
               </li>
             );
           })}
