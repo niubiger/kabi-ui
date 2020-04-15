@@ -1,3 +1,5 @@
+import { Reducers, Action } from './types';
+
 /**
  * @description 获取DOM元素距离顶部高度
  * @param ele DOM元素
@@ -34,4 +36,11 @@ export function isArrayNotEmpty(arr: any): boolean {
 
 export function ElimateUnitAsNumber(str: string, unit: string): number {
   return Number(str.replace(new RegExp(unit, 'g'), ''));
+}
+
+export function genReducer(reducers: Reducers, state: any, action: Action) {
+  if (Object.prototype.hasOwnProperty.call(reducers, action.type)) {
+    return reducers[action.type](state, action);
+  }
+  return state;
 }

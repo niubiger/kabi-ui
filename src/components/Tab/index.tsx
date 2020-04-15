@@ -11,9 +11,10 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
-import model, { Action } from './model';
+import model from './model';
 import { isArrayNotEmpty } from '../../utils';
 import { useResize } from '../../utils/hooks';
+import { Action } from '../../utils/types';
 import theme from '../../config/theme';
 import './index.scss';
 

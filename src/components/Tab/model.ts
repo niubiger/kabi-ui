@@ -1,13 +1,7 @@
-import { ElimateUnitAsNumber } from '../../utils';
-import { Reducer } from 'react';
+import { ElimateUnitAsNumber, genReducer } from '../../utils';
+import { Action, Reducers } from '../../utils/types';
 
-export type Action = {
-  type: string;
-  payload: any;
-  [propName: string]: any;
-};
-
-const reducers: { [propName: string]: Reducer<any, Action> } = {
+const reducers: Reducers = {
   setCurrent(state, { payload: { current } }) {
     return { ...state, current };
   },
@@ -66,6 +60,6 @@ export default {
     contentWidth: 0,
   },
   reducer(state: any, action: Action) {
-    return reducers[action.type](state, action);
+    return genReducer(reducers, state, action);
   },
 };
