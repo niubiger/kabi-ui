@@ -39,7 +39,13 @@ const reducers: Reducers = {
     const realPercent = (mouseCoord.x - state.railRect.left) / state.railRect.width;
     const realCaclVal = realPercent * (max - min) + min;
 
-    let val = Math.ceil((realCaclVal - min) / step) * step;
+    let val;
+    if (realCaclVal > state.value * times + step / 2)
+      val = Math.ceil((realCaclVal - min) / step) * step;
+    else if (realCaclVal < state.value * times - step / 2)
+      val = Math.floor((realCaclVal - min) / step) * step;
+    else val = state.value * times;
+
     if (val > max) val = max;
     if (val < min) val = min;
     if (Object.is(val, -0)) val = 0;

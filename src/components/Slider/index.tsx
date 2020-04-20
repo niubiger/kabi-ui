@@ -6,6 +6,7 @@ import React, {
   Reducer,
   useCallback,
   MouseEventHandler,
+  CSSProperties,
 } from 'react';
 import classNames from 'classnames';
 import throttle from 'lodash/throttle';
@@ -47,6 +48,19 @@ export interface SliderProps {
    * mouseup事件之后触发
    */
   onChangeCommited?: (val: number, e: MouseEvent) => void;
+  /**
+   * 是否不可用
+   * @default false
+   */
+  disabled?: boolean;
+  /**
+   * 包裹元素的样式
+   */
+  outerStyle?: CSSProperties;
+  /**
+   * 额外样式类名
+   */
+  className?: string;
 }
 
 const clsPrefix = `${theme['global-prefix']}-slider`;
@@ -59,6 +73,9 @@ const Slider: FC<SliderProps> = ({
   step = 1,
   onChange,
   onChangeCommited,
+  disabled = false,
+  outerStyle,
+  className,
 }) => {
   const thumbRef = useRef<HTMLSpanElement>(null);
   const railRef = useRef<HTMLSpanElement>(null);
@@ -85,6 +102,8 @@ const Slider: FC<SliderProps> = ({
 
   const handleRailClick: MouseEventHandler<HTMLSpanElement> = useCallback(
     e => {
+      if (disabled) return;
+
       const thumb = thumbRef.current as HTMLSpanElement;
       const { left, top, width, height } = thumb.getBoundingClientRect();
       const isInRangeX = e.clientX >= left && e.clientX <= left + width;
@@ -97,7 +116,7 @@ const Slider: FC<SliderProps> = ({
 
       calcMove(e);
     },
-    [calcMove],
+    [calcMove, disabled],
   );
 
   const getStartPosition = useCallback(() => {
@@ -107,8 +126,9 @@ const Slider: FC<SliderProps> = ({
   }, []);
 
   useEffect(() => {
-    dispatch({ type: 'calcProps', payload: { max, min, value, defaultValue, step } });
-  }, [defaultValue, value, max, min, step]);
+    if (!disabled)
+      dispatch({ type: 'calcProps', payload: { max, min, value, defaultValue, step } });
+  }, [defaultValue, value, max, min, step, disabled]);
 
   useEffect(() => {
     const thumb = thumbRef.current as HTMLSpanElement;
@@ -124,19 +144,27 @@ const Slider: FC<SliderProps> = ({
   }, []);
 
   useEffect(() => {
-    if (state.isMouseDown) document.addEventListener('mousemove', moveHandler);
-    else document.removeEventListener('mousemove', moveHandler);
-    return () => {
-      document.removeEventListener('mousemove', moveHandler);
-    };
-  }, [moveHandler, state.isMouseDown]);
+    if (!disabled) {
+      if (state.isMouseDown) document.addEventListener('mousemove', moveHandler);
+      else document.removeEventListener('mousemove', moveHandler);
+      return () => {
+        document.removeEventListener('mousemove', moveHandler);
+      };
+    }
+  }, [moveHandler, state.isMouseDown, disabled]);
 
   useResize(() => {
     getStartPosition();
   }, 200);
 
   return (
-    <span className={`${clsPrefix}-outer`} onClick={handleRailClick}>
+    <span
+      className={classNames(`${clsPrefix}-outer`, className, {
+        [`${clsPrefix}-disabled`]: disabled,
+      })}
+      onClick={handleRailClick}
+      style={outerStyle}
+    >
       <span className={`${clsPrefix}-wrapper`}>
         <span className={`${clsPrefix}-rail`} ref={railRef} />
         <span className={`${clsPrefix}-track`} style={{ width: `${state.percent * 100}%` }} />

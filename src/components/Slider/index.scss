@@ -1,6 +1,6 @@
 @import '../../config/variables.scss';
 
-$thumb-normal-size: 16px;
+$normal-thumb-size: 16px;
 $height: 2px;
 
 .#{$global-prefix}-slider {
@@ -9,15 +9,21 @@ $height: 2px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: $thumb-normal-size;
+    height: $normal-thumb-size;
     cursor: pointer;
     touch-action: none;
     user-select: none;
   }
+  &-disabled {
+    cursor: not-allowed;
+  }
+  &-disabled > &-wrapper {
+    color: $text-color-disabled;
+  }
   &-wrapper {
     color: $main-color;
     display: inline-block;
-    width: calc(100% - #{$thumb-normal-size});
+    width: calc(100% - #{$normal-thumb-size});
     height: $height;
     position: relative;
   }
@@ -43,12 +49,21 @@ $height: 2px;
   }
   &-thumb {
     background-color: currentColor;
-    width: $thumb-normal-size;
-    height: $thumb-normal-size;
-    border-radius: $thumb-normal-size / 2;
+    width: $normal-thumb-size;
+    height: $normal-thumb-size;
+    border-radius: $normal-thumb-size / 2;
     position: absolute;
-    margin-top: -($thumb-normal-size - $height) / 2;
-    margin-left: -$thumb-normal-size / 2;
-    transition: left 0.2s;
+    margin-top: -($normal-thumb-size - $height) / 2;
+    margin-left: -$normal-thumb-size / 2;
+    transition: left 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px $shadow-color;
+  }
+  &-outer:hover &-thumb {
+    transform: scale(1.05);
+    box-shadow: 0 2px 6px $shadow-color;
+  }
+  &-outer:active &-thumb {
+    transform: scale(0.95);
+    box-shadow: 0 1px 5px $shadow-color;
   }
 }
