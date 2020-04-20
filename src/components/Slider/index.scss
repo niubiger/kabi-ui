@@ -1,0 +1,54 @@
+@import '../../config/variables.scss';
+
+$thumb-normal-size: 16px;
+$height: 2px;
+
+.#{$global-prefix}-slider {
+  &-outer {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: $thumb-normal-size;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+  }
+  &-wrapper {
+    color: $main-color;
+    display: inline-block;
+    width: calc(100% - #{$thumb-normal-size});
+    height: $height;
+    position: relative;
+  }
+  &-rail {
+    background-color: currentColor;
+    opacity: 0.35;
+    width: 100%;
+    height: $height;
+    position: absolute;
+    border-radius: $height / 2;
+    top: 0;
+    left: 0;
+  }
+  &-track {
+    background-color: currentColor;
+    width: 100%;
+    height: $height;
+    position: absolute;
+    border-radius: $height / 2;
+    left: 0;
+    top: 0;
+    transition: width 0.2s;
+  }
+  &-thumb {
+    background-color: currentColor;
+    width: $thumb-normal-size;
+    height: $thumb-normal-size;
+    border-radius: $thumb-normal-size / 2;
+    position: absolute;
+    margin-top: -($thumb-normal-size - $height) / 2;
+    margin-left: -$thumb-normal-size / 2;
+    transition: left 0.2s;
+  }
+}

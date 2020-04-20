@@ -8,3 +8,4 @@ export { default as message, Message } from './components/Message';
 export { default as Tab } from './components/Tab';
 export { default as Switch } from './components/Switch';
 export { default as DanceNumber } from './components/DanceNumber';
+export { default as Slider } from './components/Slider';
