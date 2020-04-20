@@ -5,7 +5,7 @@ menu: Components
 ---
 
 import { Props, Playground } from 'docz';
-import { Slider } from '../';
+import { Slider, Input } from '../';
 
 # Slider
 
@@ -16,15 +16,32 @@ import { Slider } from '../';
 ## Slider 示例
 <Playground>
     {() => {
-        const [val, setVal] = React.useState(0)
+        const step = 10;
+        const max = 100;
+        const min = 0;
+        const [val, setVal] = React.useState(0);
+        const handleChange = React.useCallback(val => {
+            console.log('change when mousemove', val);
+            setVal(val);
+        }, []);
+        const handleChangeSubmitted = React.useCallback(val => {
+            console.log('change commited after mouseup', val);
+        }, []);
         return (
-            <div style={{ padding: 20, width: 200 }}>
-                <Slider
-                    value={val}
-                    step={10}
-                    onChange={val => console.log('change when mousemove', val)}
-                    onChangeCommited={(val => console.log('change commited after mouseup', val))}
-                />
+            <div style={{ display: 'flex', alignItems: 'center', padding: 20 }}>
+                <div style={{ width: 200, display: 'flex' }}>
+                    <Slider
+                        value={val}
+                        max={max}
+                        min={min}
+                        step={step}
+                        onChange={handleChange}
+                        onChangeCommited={handleChangeSubmitted}
+                    />
+                </div>
+                <div style={{ marginLeft: 20, width: 100 }}>
+                    <Input label="value" outerStyle={{ width: '100%' }} value={val} onChange={e => setVal(e.target.value)} type="number" step={step} max={max} min={min} />
+                </div>
             </div>
         );
     }}
