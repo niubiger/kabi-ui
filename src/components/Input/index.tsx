@@ -8,6 +8,7 @@ import React, {
   ForwardRefExoticComponent,
   useRef,
   useImperativeHandle,
+  useEffect,
 } from 'react';
 import classNames from 'classnames';
 import theme from '../../config/theme';
@@ -71,7 +72,7 @@ const Input: ForwardRefExoticComponent<InputProps> = React.forwardRef(
     },
     ref: Ref<Partial<HTMLInputElement>>,
   ) => {
-    const [val, setVal] = useState(defaultValue || value);
+    const [val, setVal] = useState(() => defaultValue || value);
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       setVal(e.target.value);
       if (typeof onChange === 'function') onChange(e);
@@ -85,6 +86,9 @@ const Input: ForwardRefExoticComponent<InputProps> = React.forwardRef(
         (inputRef.current as HTMLInputElement).blur();
       },
     }));
+    useEffect(() => {
+      if (value !== undefined) setVal(value);
+    }, [value]);
     return (
       <span className={classNames(`${clsPrefix}-outer`, className)} style={outerStyle}>
         <span
